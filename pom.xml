@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2015-2021, Patricia Maraver
+  ~ Copyright (c) 2015-2022, Patricia Maraver
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -21,13 +21,24 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.neuromorpho</groupId>
+    <groupId>org.neuromorpho.literature</groupId>
     <artifactId>NeuroMorphoLiterature</artifactId>
     <packaging>pom</packaging>
     <version>1.0</version>
     <modules>
         <module>ApiLiterature</module>
-        <module>ApiLiterature</module>
+        <module>Agenda</module>
+        <module>ReconstructionsExpiration</module>
+        <module>Release</module>
+        <module>FileAcquisition</module>
+        <module>PDF</module>
+        <module>Metadata</module>
+        <module>Search</module>
+        <module>Evaluate</module>
+        <module>FullText</module>
+        <module>Articles</module>
+        <module>Gateway</module>
+
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -44,6 +55,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
