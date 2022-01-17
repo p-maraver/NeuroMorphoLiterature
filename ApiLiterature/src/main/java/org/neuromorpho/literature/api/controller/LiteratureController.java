@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2021, Patricia Maraver
+ * Copyright (c) 2015-2022, Patricia Maraver
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,11 +50,11 @@ public class LiteratureController {
      */
     /**
      * @apiVersion 1.0.0
-     * @api {get} /literature/count Count
+     * @api {get} /literature/count Count Publications and Reconstructions
      * @apiDescription Returns the count summary for articles and reconstructions by status:
      * Available, Not available, Determining availability, Negative
      * @apiName count
-     * @apiGroup NeuroMorpho.Org Literature API
+     * @apiGroup  Literature
      * @apiSuccess {String} label       Status of the article or reconstructions label
      * @apiSuccess {Number} value       #Reconstructions or #Articles
      * @apiSuccessExample {json} Success-Response:
@@ -83,10 +83,10 @@ public class LiteratureController {
      */
     /**
      * @apiVersion 1.0.0
-     * @api {get} /literature/years Publication years
+     * @api {get} /literature/years Find Publication years
      * @apiDescription Returns the years for which there are publications
      * @apiName years
-     * @apiGroup NeuroMorpho.Org Literature API
+     * @apiGroup  Literature
      * @apiSuccess {Number[]} value       List of publication years
      * @apiSuccessExample {json} Success-Response:
      * [2016, 1992, ..., 1997, 1996]
@@ -106,11 +106,11 @@ public class LiteratureController {
      */
     /**
      * @apiVersion 1.0.0
-     * @api {get} /literature/reports?type= Reports
+     * @api {get} /literature/reports?type= Generate Reports
      * @apiParam {String} type Report type: FrozenEvolution|CompleteDetails
      * @apiDescription Generates the Excel reports FrozenEvolution and CompleteDetails in folder pre-defined on application.properties
      * @apiName reports
-     * @apiGroup NeuroMorpho.Org Literature API
+     * @apiGroup  Literature
      */
     @RequestMapping(value = "/reports", method = RequestMethod.GET)
     public void getReport(String type) throws Exception {
@@ -127,13 +127,13 @@ public class LiteratureController {
      */
     /**
      * @apiVersion 1.0.0
-     * @api {get} /literature/articles?page=&data.publishedDate=&data.dataUsage= Publications data
+     * @api {get} /literature/articles?page=&data.publishedDate=&data.dataUsage= Find Publications
      * @apiParam {integer} page Page number
-     * @apiParam {String} data.publishedDate Publication year to filter by
-     * @apiParam {String} data.dataUsage DataUsage: USING|CITING|SHARING|DESCRIBING_NEURONS|ABOUT to filter by
+     * @apiParam {String} data_publishedDate Publication year to filter by
+     * @apiParam {String} data_dataUsage DataUsage: USING|CITING|SHARING|DESCRIBING_NEURONS|ABOUT to filter by
      * @apiDescription Returns all the publications and it's data found for the query
      * @apiName articles
-     * @apiGroup NeuroMorpho.Org Literature API
+     * @apiGroup  Literature
      * @apiSuccessExample {json} Success-Response:
      * {
      *      "content": [

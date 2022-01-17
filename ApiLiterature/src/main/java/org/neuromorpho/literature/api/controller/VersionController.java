@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2021, Patricia Maraver
+ * Copyright (c) 2015-2022, Patricia Maraver
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,10 +49,10 @@ public class VersionController {
      */
     /**
      * @apiVersion 1.0.0
-     * @api {get} /version?type=literature Version
+     * @api {get} /version?type=literature Find Version
      * @apiDescription Returns the current version and date
      * @apiName version
-     * @apiGroup NeuroMorpho.Org Literature API
+     * @apiGroup Literature
      * @apiSuccess {String} version Version number
      * @apiSuccess {String} type Literature
      * @apiSuccess {String} date Release date
