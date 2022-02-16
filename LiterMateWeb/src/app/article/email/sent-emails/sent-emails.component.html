@@ -1,0 +1,16 @@
+<mat-accordion>
+  <mat-expansion-panel [expanded]=false *ngFor="let email of emailList">
+
+    <mat-expansion-panel-header>
+      <mat-panel-title class="header">
+        {{email.subject}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div><b>From:</b> {{email.from}}</div>
+    <div><b>To:</b> {{email.to}}</div>
+    <div><b>CC:</b> {{email.cc}}</div>
+    <div><b>Date:</b> {{email.sentDate}}</div>
+    <hr>
+    <div [innerHTML]="email.content"></div>
+  </mat-expansion-panel>
+</mat-accordion>

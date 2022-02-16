@@ -1,0 +1,135 @@
+<div>Current version used for classifying
+  <select name="version" [(ngModel)]="currentVersion">
+    <option *ngFor="let v of versionList">
+      {{ v }}
+    </option>
+  </select>
+  <button (click)="updateVersion(currentVersion)"> Update</button>
+  <div *ngIf="updatedVersion">
+    <mat-icon aria-hidden="false">check</mat-icon>
+  </div>
+</div>
+<div>Train a new version
+  <input [(ngModel)]="newVersion">
+  <button (click)="train()" [disabled]="newVersion ==='' && training"> Train</button>
+
+</div>
+<mat-tab-group>
+  <mat-tab *ngFor="let classifier of classifierList" [label]=classifier.version>
+    <p>Date: {{classifier?.date}}</p>
+    <p>Status: {{getStatus(classifier?.status)}}</p>
+
+    <ul>
+      <li>Train #Articles: {{classifier?.trainSamples}}</li>
+      <li>Train Accuracy: {{getValue(classifier?.trainAccuracy)}}</li>
+      <li>Train Loss: {{getValue(classifier?.trainLoss)}}</li>
+    </ul>
+    <ul>
+      <li>Test #Articles: {{classifier?.testSamples}}</li>
+      <li>Test Accuracy: {{classifier?.testAccuracy}}</li>
+      <li>Test Loss: {{classifier?.testLoss}}</li>
+    </ul>
+
+    <p>Keywords: {{classifier?.keywordList}}</p>
+
+    <div class="charts">
+
+
+      <div id="threshold-row">
+        <p>Thresholds:
+          <button (click)="update(classifier.id, 'thresholds', classifier.thresholds)"> Update</button>
+        </p>
+        <div *ngIf="updatedThresholds">
+          <mat-icon aria-hidden="false">check</mat-icon>
+        </div>
+      </div>
+      <div id="charts-row">
+        <div class="positive-chart">
+          <h4>Positives graph</h4>
+
+          <div class="values-chart">
+            <div class="values">
+              <ul>
+                <li>Positive High >= {{classifier?.thresholds?.positiveH}}</li>
+                <li>Positive Labor saved:<input type="number" [ngModel]="classifier?.thresholds?.positiveLaborSavedH"
+                                                (ngModelChange)="classifier.thresholds.positiveLaborSavedH = $event"></li>
+                <li>False Positives: <input type="number" [ngModel]="classifier?.thresholds?.falsePositivesH"
+                                            (ngModelChange)="classifier.thresholds.falsePositivesH = $event"></li>
+              </ul>
+              <ul>
+                <li>Positive Low >= {{classifier?.thresholds?.positiveL}}</li>
+                <li>Positive Labor saved:{{classifier?.thresholds?.positiveLaborSavedL}}</li>
+                <li>False Positives: {{classifier?.thresholds?.falsePositivesL}}</li>
+              </ul>
+            </div>
+            <div *ngIf=" classifier.chartDataPositives != null" class="chart">
+              <div style="display: block">
+                <canvas baseChart
+                        [datasets]="classifier.chartDataPositives"
+                        [labels]="chartLabelsPositives"
+                        [options]="barChartOptionsPositive"
+                        [legend]="chartLegend"
+                        [chartType]="chartType"
+                        (chartClick)="positiveChartClicked($event, classifier)">
+                </canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="negative-chart">
+
+          <h4>Negatives graph</h4>
+
+          <div class="values-chart">
+
+            <div class="values">
+              <ul>
+                <li>Negative High <= {{classifier?.thresholds?.negativeH}}</li>
+                <li>Negative Labor saved: <input type="number" [ngModel]="classifier?.thresholds?.negativeLaborSavedH"
+                                                 (ngModelChange)="classifier.thresholds.negativeLaborSavedH = $event">
+                </li>
+                <li>False Negatives: <input type="number" [ngModel]="classifier?.thresholds?.falseNegativesH"
+                                            (ngModelChange)="classifier.thresholds.falseNegativesH = $event"></li>
+              </ul>
+              <ul>
+                <li>Negative Low <= {{classifier?.thresholds?.negativeL}}</li>
+                <li>Negative Labor saved: {{classifier?.thresholds?.negativeLaborSavedL}}</li>
+                <li>False Negatives: {{classifier?.thresholds?.falseNegativesL}}</li>
+              </ul>
+            </div>
+          </div>
+          <div *ngIf=" classifier.chartDataNegatives != null" class="chart">
+            <div style="display: block">
+              <canvas baseChart
+                      [datasets]="classifier.chartDataNegatives"
+                      [labels]="chartLabelsNegatives"
+                      [options]="barChartOptionsNegative"
+                      [legend]="chartLegend"
+                      [chartType]="chartType"
+                      (chartClick)="negativeChartClicked($event, classifier)">
+                >
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+    <div *ngIf=" classifier.chartData != null">
+      <div style="display: block">
+        <canvas baseChart
+                [datasets]="classifier.chartData"
+                [labels]="chartLabels"
+                [options]="barChartOptions"
+                [legend]="chartLegend"
+                [chartType]="chartType">
+        </canvas>
+      </div>
+    </div>
+
+  </mat-tab>
+</mat-tab-group>
+

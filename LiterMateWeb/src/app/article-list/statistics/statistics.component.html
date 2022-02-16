@@ -1,0 +1,148 @@
+<table class="table">
+  <tr class="success">
+
+    <td><b>In processing pipeline</b><br>
+      {{getNArticles('In processing pipeline')?.nArticles| number: '1.0-2'}}
+      [{{getNArticles('In processing pipeline')?.nReconstructions | number: '1.0-2'}} ]<br>
+      shared: {{getNArticles('In processing pipeline')?.nSharedArticles| number: '1.0-2'}}
+    </td>
+    <td><b>On hold</b><br>
+      {{getNArticles('On hold')?.nArticles | number: '1.0-2'}}
+      [{{getNArticles('On hold')?.nReconstructions | number:'1.0-2'}} ]<br>
+      shared: {{getNArticles('On hold')?.nSharedArticles | number:'1.0-2'}}
+    </td>
+    <td><b>In release</b><br>
+      {{getNArticles('In release')?.nArticles | number: '1.0-2'}}
+      [{{getNArticles('In release')?.nReconstructions | number:'1.0-2'}} ]<br>
+      shared: {{getNArticles('In release')?.nSharedArticles | number:'1.0-2' }}
+    </td>
+    <td><b>In repository</b><br>
+      {{getNArticles('In repository')?.nArticles | number: '1.0-2'}}
+      [{{getNArticles('In repository')?.nReconstructions | number:'1.0-2'}} ]<br>
+      shared: {{getNArticles('In repository')?.nSharedArticles | number:'1.0-2'}}
+    </td>
+    <td>
+    </td>
+    <td>
+    </td>
+    <td></td>
+
+
+    <td ng-init="setTotals('Available')"><b>Total</b><br>
+      {{getSumNArticles('nArticles', 'Available')}}[{{getSumNArticles('nReconstructions', 'Available')}}]<br>
+      {{getSumNArticles('nSharedArticles', 'Available') | number: '1.0-2'}}<br>
+    </td>
+
+  </tr>
+  <tr class="info">
+    <td><b>To be requested</b><br>
+      {{getNArticles('To be requested')?.nArticles | number: '1.0-2'}}
+      [{{getNArticles('To be requested')?.nReconstructions | number:'1.0-2'}} ]<br>
+      shared: {{getNArticles('To be requested')?.nSharedArticles | number:'1.0-2'}}
+    </td>
+    <td><b>Invited</b><br>
+      {{getNArticles('Invited')?.nArticles | number: '1.0-2'}}
+      [{{getNArticles('Invited')?.nReconstructions | number:'1.0-2'}} ]<br>
+      shared: {{getNArticles('Invited')?.nSharedArticles | number:'1.0-2' }}
+    </td>
+    <td><b>Reminder</b><br>
+      {{getNArticles('Reminder')?.nArticles | number: '1.0-2'}}
+      [{{getNArticles('Reminder')?.nReconstructions | number:'1.0-2' }} ]<br>
+      shared: {{getNArticles('Reminder')?.nSharedArticles | number:'1.0-2' }}
+    </td>
+    <td><b>Pestering</b><br>
+      {{getNArticles('Pestering')?.nArticles | number: '1.0-2'}}
+      [{{getNArticles('Pestering')?.nReconstructions | number:'1.0-2' }} ]<br>
+      shared: {{getNArticles('Pestering')?.nSharedArticles | number:'1.0-2' }}
+    </td>
+    <td><b>Ultimatum</b><br>
+      {{getNArticles('Ultimatum')?.nArticles | number: '1.0-2'}}
+      [{{getNArticles('Ultimatum')?.nReconstructions | number:'1.0-2' }} ]<br>
+      shared: {{getNArticles('Ultimatum')?.nSharedArticles | number:'1.0-2' }}
+    </td>
+    <td><b>Positive response</b><br>
+      {{getNArticles('Positive response')?.nArticles | number: '1.0-2'}}
+      [{{getNArticles('Positive response')?.nReconstructions | number:'1.0-2' }} ]<br>
+      shared: {{getNArticles('Positive response')?.nSharedArticles | number:'1.0-2' }}
+    </td>
+    <td></td>
+
+    <td><b>Total</b><br>
+      {{getSumNArticles('nArticles', 'Determining availability')}}
+      [{{getSumNArticles('nReconstructions', 'Determining availability')}}]<br>
+      {{getSumNArticles('nSharedArticles', 'Determining availability') | number: '1.0-2'}}<br>
+    </td>
+
+  </tr>
+  <tr class="danger">
+    <td><b>No response</b><br>
+      {{getNArticles('No response')?.nArticles | number:'1.0-2' }}
+      [{{getNArticles('No response')?.nReconstructions | number:'1.0-2' }} ]<br>
+      shared: {{getNArticles('No response')?.nSharedArticles | number:'1.0-2' }}
+    </td>
+    <td><b>Communication stopped</b><br>
+      {{getNArticles('Communication stopped')?.nArticles | number:'1.0-2' }}
+      [{{getNArticles('Communication stopped')?.nReconstructions | number:'1.0-2' }} ]<br>
+      shared: {{getNArticles('Communication stopped')?.nSharedArticles | number:'1.0-2' }}
+    </td>
+    <td><b>Request declined</b><br>
+      {{getNArticles('Request declined')?.nArticles | number:'1.0-2' }}
+      [{{getNArticles('Request declined')?.nReconstructions | number:'1.0-2' }} ]<br>
+      shared: {{getNArticles('Request declined')?.nSharedArticles | number:'1.0-2' }}
+    </td>
+    <td><b>Lost data</b><br>
+      {{getNArticles('Lost data')?.nArticles | number:'1.0-2' }}
+      [{{getNArticles('Lost data')?.nReconstructions | number:'1.0-2' }} ]<br>
+      shared: {{getNArticles('Lost data')?.nSharedArticles | number:'1.0-2' }}
+    </td>
+    <td><b>No contact information</b><br>
+      {{getNArticles('No contact information')?.nArticles | number:'1.0-2' }}
+      [{{getNArticles('No contact information')?.nReconstructions | number:'1.0-2' }} ]<br>
+      shared: {{getNArticles('No contact information')?.nSharedArticles | number:'1.0-2' }}
+    </td>
+    <td><b>Bounced</b><br>
+      {{getNArticles('Bounced')?.nArticles | number:'1.0-2' }}
+      [{{getNArticles('Bounced')?.nReconstructions | number:'1.0-2' }} ]<br>
+      shared: {{getNArticles('Bounced')?.nSharedArticles | number:'1.0-2' }}
+    </td>
+    <td><b>Bounced Negative</b><br>
+      {{getNArticles('Bounced Negative')?.nArticles | number:'1.0-2' }}
+      [{{getNArticles('Bounced Negative')?.nReconstructions | number:'1.0-2' }} ]<br>
+      shared: {{getNArticles('Bounced Negative')?.nSharedArticles | number:'1.0-2' }}
+    </td>
+
+    <td ng-init="setTotals('Not available')"><b>Total</b><br>
+      {{getSumNArticles('nArticles', 'Not available')}}[{{getSumNArticles('nReconstructions', 'Not available')}}]<br>
+      {{getSumNArticles('nSharedArticles', 'Not available') | number: '1.0-2'}}<br>
+    </td>
+  <tr class="usage">
+    <td><b>Using:</b><br>
+      total: {{usageList['USING']?.total | number:'1.0-2' }}<br>
+      net: {{usageList['USING']?.net | number:'1.0-2' }}<br>
+      multi: {{usageList['USING']?.multi | number:'1.0-2' }}<br>
+    </td>
+    <td><b>Citing</b><br>
+      total: {{usageList['CITING']?.total | number:'1.0-2' }}<br>
+      net: {{usageList['CITING']?.net | number:'1.0-2' }}<br>
+      multi: {{usageList['CITING']?.multi | number:'1.0-2' }}<br>
+    </td>
+    <td><b>About</b><br>
+      total: {{usageList['ABOUT']?.total | number:'1.0-2' }}<br>
+      net: {{usageList['ABOUT']?.net | number:'1.0-2' }}<br>
+      multi: {{usageList['ABOUT']?.multi | number:'1.0-2' }}<br>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+  <td></td>
+
+    <td ng-init=""><b>Total</b><br>
+      total: {{usageList['USING']?.total + usageList['CITING']?.total + usageList['ABOUT']?.total| number:'1.0-2' }}<br>
+      net: {{usageList['USING']?.net + usageList['CITING']?.net + usageList['ABOUT']?.net| number:'1.0-2' }}<br>
+      multi: {{usageList['USING']?.multi + usageList['CITING']?.multi + usageList['ABOUT']?.multi| number:'1.0-2' }}<br>
+    </td>
+
+
+  </tr>
+
+</table>

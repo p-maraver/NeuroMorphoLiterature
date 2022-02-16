@@ -1,0 +1,142 @@
+<mat-sidenav-container>
+  <mat-sidenav class="content" mode="side" opened>
+    <mat-nav-list *ngIf="fullText?.title">
+      <a href="/article/{{id}}/fulltext#title" mat-list-item> Title </a>
+      <div *ngIf="fullText?.termList">
+        <div *ngFor="let term of fullText?.termList['TITLE']">
+          <div class="term-name">{{term.name}}</div>
+          <div *ngFor="let value of term.valueList" class="term-value">
+            {{value}}
+          </div>
+        </div>
+      </div>
+    </mat-nav-list>
+    <mat-nav-list *ngIf="fullText?.sectionList">
+      <a href="/article/{{id}}/fulltext#abstract" mat-list-item> Abstract </a>
+      <div *ngIf="fullText?.termList">
+        <div *ngFor="let term of fullText?.termList['ABSTRACT']">
+          <div class="term-name">{{term.name}}</div>
+          <div *ngFor="let value of term.valueList" class="term-value">
+            {{value}}
+          </div>
+        </div>
+      </div>
+      <a href="/article/{{id}}/fulltext#sections" mat-list-item> Sections </a>
+      <div *ngIf="fullText?.termList">
+        <div *ngFor="let term of fullText?.termList['SECTIONS']" class="term">
+          <div class="term-name">{{term.name}}</div>
+          <div *ngFor="let value of term.valueList" class="term-value">
+            {{value}}
+          </div>
+        </div>
+      </div>
+      <a href="/article/{{id}}/fulltext#figures" mat-list-item> Figures </a>
+      <div *ngIf="fullText?.termList">
+        <div *ngFor="let term of fullText?.termList['FIGURES']" class="term">
+          <div class="term-name">{{term.name}}</div>
+          <div *ngFor="let value of term.valueList" class="term-value">
+            {{value}}
+          </div>
+        </div>
+      </div>
+      <div *ngIf="fullText?.supplementaryMaterial">
+        <a href="/article/{{id}}/fulltext#supplementary" mat-list-item> Supplementary Material </a>
+        <div *ngIf="fullText?.termList">
+          <div *ngFor="let term of fullText?.termList['SUPPLEMENTARY']" class="term">
+            <div class="term-name">{{term.name}}</div>
+            <div *ngFor="let value of term.valueList" class="term-value">
+              {{value}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="/article/{{id}}/fulltext#acknowledgment" mat-list-item> Acknowledgment </a>
+      <div *ngIf="fullText?.termList">
+
+        <div *ngFor="let term of fullText?.termList['ACKNOWLEDGMENT']" class="term">
+          <div class="term-name">{{term.name}}</div>
+          <div *ngFor="let value of term.valueList" class="term-value">
+            {{value}}
+          </div>
+        </div>
+      </div>
+      <a href="/article/{{id}}/fulltext#references" mat-list-item> References </a>
+      <div *ngIf="fullText?.termList">
+
+        <div *ngFor="let term of fullText?.termList['REFERENCES']" class="term">
+          <div class="term-name">{{term.name}}</div>
+          <div *ngFor="let value of term.valueList" class="term-value">
+            {{value}}
+          </div>
+        </div>
+      </div>
+
+    </mat-nav-list>
+    <mat-nav-list *ngIf="fullText?.rawText">
+      <a mat-list-item> RawText </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div *ngIf="!fullText">
+      <mat-progress-bar mode="query"></mat-progress-bar>
+    </div>
+
+    <div *ngIf="fullText">
+      <h2>
+        <div [innerHTML]="fullText?.title" class="title"></div>
+      </h2>
+      <div *ngFor="let author of fullText?.authorGroup?.authorList">
+        <h5>{{author.givenName}} {{author.surname}} - {{author.email}}</h5>
+      </div>
+      <div *ngFor="let affiliation of fullText?.authorGroup?.affiliationList">
+        <p>{{affiliation}}</p>
+      </div>
+      <h3 id="abstract">Abstract</h3>
+      <app-abstract
+        [abstractContent]="fullText?.abstractContent"
+      ></app-abstract>
+      <div *ngIf="fullText?.sectionList">
+        <h3 id="sections">Sections</h3>
+        <app-section
+          [searchPortal]="searchPortal"
+          [sectionList]="fullText?.sectionList"
+        ></app-section>
+        <h3 id="figures">Figures</h3>
+        <app-images
+          [figureList]="fullText?.figureList"
+          [isSupplementary]=false
+        ></app-images>
+        <div *ngIf="fullText?.supplementaryMaterial">
+          <h3 id="supplementary">Supplementary material</h3>
+          <app-supplementary-material
+            [supplementaryMaterial]="fullText?.supplementaryMaterial"
+          ></app-supplementary-material>
+        </div>
+        <h3 id="acknowledgment">Acknowledgment</h3>
+        <app-acknowledgment
+          [acknowledgment]="fullText?.acknowledgment"
+        ></app-acknowledgment>
+        <h3 id="references">References</h3>
+        <app-references
+          [referenceList]="fullText?.referenceList"
+        ></app-references>
+      </div>
+      <div *ngIf="fullText?.rawText">
+        <div [innerHTML]="fullText?.rawText"></div>
+      </div>
+    </div>
+
+  </mat-sidenav-content>
+  <mat-sidenav class="highlight" mode="side" opened *ngIf="classifier">
+    <h4>Relevant terms found</h4>
+    <div *ngFor="let term of termList">
+      <a href="/article/{{id}}/fulltext#{{term}}" mat-list-item> {{term}} </a>
+    </div>
+    <h4>Keywords found</h4>
+    <div *ngFor="let keyWord of keyWordList">
+      <a href="/article/{{id}}/fulltext#{{keyWord}}" mat-list-item> {{keyWord}} </a>
+    </div>
+  </mat-sidenav>
+
+
+</mat-sidenav-container>

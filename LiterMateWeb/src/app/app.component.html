@@ -1,0 +1,65 @@
+
+<nav *ngIf="showHeather()">
+  <button mat-button [routerLink]="['dashboard']"><mat-icon [inline]="true" aria-hidden="false">home</mat-icon></button>
+  <button mat-button><a href="http://129.174.10.65:8080/NMOLiteratureWeb/index.html"><mat-icon [inline]="true" aria-hidden="false">widgets</mat-icon></a></button>
+
+  <button mat-button [matMenuTriggerFor]="menu1">Evaluate</button>
+  <mat-menu #menu1="matMenu">
+    <button mat-menu-item [routerLink]="['articles', 'ToBeEvaluated']">Reconstructions</button>
+    <button mat-menu-item [routerLink]="['articles', 'NeuroMorpho']">NeuroMorpho.Org</button>
+
+  </mat-menu>
+  <button mat-button [matMenuTriggerFor]="menu2">Review</button>
+  <mat-menu #menu2="matMenu">
+    <button mat-menu-item [routerLink]="['articles', 'Evaluated']" [queryParams]="{'data.publishedDate': 'gte:2014-01-01'}">Reconstructions</button>
+    <button mat-menu-item [routerLink]="['articles', 'NeuroMorphoEvaluated']" [queryParams]="{}">NeuroMorpho.Org</button>
+  </mat-menu>
+  <button mat-button [matMenuTriggerFor]="menuClassifier">Classifier</button>
+  <mat-menu #menuClassifier="matMenu">
+    <button mat-menu-item [routerLink]="['articles', 'Evaluated']" [queryParams]="{view: 'classifier', 'data.publishedDate': 'All'}">Reconstructions</button>
+    <button mat-menu-item [routerLink]="['articles', 'NeuroMorphoEvaluated']" [queryParams]="{view: 'classifier'}">NeuroMorpho.Org</button>
+    <button mat-menu-item [routerLink]="['classifier']">Train</button>
+
+  </mat-menu>
+  <button mat-button [matMenuTriggerFor]="menuArticles">Articles</button>
+  <mat-menu #menuArticles="matMenu">
+    <button mat-menu-item [routerLink]="['articles', 'Positive']">Positive</button>
+    <button mat-menu-item [routerLink]="['articles', 'Negative']">Negative</button>
+    <button mat-menu-item [routerLink]="['articles', 'Inaccessible']">Inaccessible</button>
+  </mat-menu>
+
+  <button mat-button [routerLink]="['article', 'new', 'details']">Add new article</button>
+  <button mat-button [matMenuTriggerFor]="menu3">Emails</button>
+  <mat-menu #menu3="matMenu">
+
+    <button mat-menu-item [routerLink]="['articles', 'Positive']" [queryParams]="{'reconstructions.currentStatusList.specificDetails': 'To be requested', view: 'emails'}">
+        Invitation <span class="numbers">  {{findStatusDetails('To be requested')}}</span></button>
+    <button mat-menu-item [routerLink]="['articles', 'Positive']" [queryParams]="{'reconstructions.currentStatusList.specificDetails': 'Invited', view: 'emails'}">
+      Reminder<span class="numbers">  {{findStatusDetails('Invited')}}</span></button>
+    <button mat-menu-item [routerLink]="['articles', 'Positive']" [queryParams]="{'reconstructions.currentStatusList.specificDetails': 'Reminder', view: 'emails'}">
+      Pestering<span class="numbers">  {{findStatusDetails('Reminder')}}</span></button>
+    <button mat-menu-item [routerLink]="['articles', 'Positive']" [queryParams]="{'reconstructions.currentStatusList.specificDetails': 'Pestering', view: 'emails'}">
+      Ultimatum<span class="numbers">  {{findStatusDetails('Pestering')}}</span></button>
+    <button mat-menu-item [routerLink]="['articles', 'Positive']" [queryParams]="{'reconstructions.currentStatusList.specificDetails': 'Ultimatum', view: 'emails'}">
+      Waiting response<span class="numbers">  {{findStatusDetails('Ultimatum')}}</span></button>
+      <button mat-menu-item [routerLink]="['articles', 'Positive']" [queryParams]="{'reconstructions.currentStatusList.specificDetails': 'Positive response', view: 'emails'}">
+      Positive response<span class="numbers">  {{findStatusDetails('Positive response')}}</span></button>
+    <button mat-menu-item [routerLink]="['articles', 'Positive']" [queryParams]="{'reconstructions.currentStatusList.specificDetails': 'Bounced', view: 'emails'}">
+      Bounced<span class="numbers">  {{findStatusDetails('Bounced')}}</span></button>
+    <button mat-menu-item [routerLink]="['articles', 'Positive']" [queryParams]="{'reconstructions.currentStatusList.specificDetails': 'Bounced Negative', view: 'emails'}">
+      Bounced Negatives<span class="numbers">  {{findStatusDetails('Bounced Negative')}}</span></button>
+  </mat-menu>
+  <button mat-button [routerLink]="['metadata']">Metadata</button>
+  <button mat-button [matMenuTriggerFor]="menuSearch">Search</button>
+  <mat-menu #menuSearch="matMenu">
+    <button mat-menu-item [routerLink]="['search', 'portals']">Portal</button>
+    <button mat-menu-item [routerLink]="['search', 'keywords']">Keywords</button>
+  </mat-menu>
+  <button mat-button [routerLink]="['agenda']">Agenda</button>
+
+  <button mat-button><a href="http://129.174.10.65:8080/NMOLiteratureWeb/release/releaseMenu.html#/release">Release</a></button>
+
+  <!--<a routerLink="/dashboard">Dashboard</a>-->
+</nav>
+<router-outlet></router-outlet>
+

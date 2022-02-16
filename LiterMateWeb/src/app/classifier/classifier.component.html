@@ -1,0 +1,15 @@
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened class="sidenav">
+    <mat-nav-list>
+      <button mat-button [routerLink]="['train']">Train</button>
+      <button mat-button [matMenuTriggerFor]="menu">Keywords</button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item [routerLink]="['keywords']" [queryParams]="{'file': 'term'}">Terms</button>
+        <button mat-menu-item [routerLink]="['keywords']" [queryParams]="{'file': 'tracingSystem'}">Tracing Systems</button>
+      </mat-menu>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

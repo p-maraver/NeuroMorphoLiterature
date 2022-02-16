@@ -1,0 +1,25 @@
+p {
+  font-size: 11px;
+  color: grey;
+}
+
+h3{
+  color: darkblue;
+}
+
+.full-width{
+  width: 100%
+}
+.input-full-width {
+  width:800px;
+}
+
+.valid  {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.invalid  {
+  border-left: 5px solid #a94442; /* red */
+  /* color: crimson;
+  border-bottom: 1px solid crimson; */
+}

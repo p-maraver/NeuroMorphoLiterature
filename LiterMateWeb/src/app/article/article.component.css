@@ -1,0 +1,88 @@
+.mat-panel-title {
+  font-weight: bold;
+}
+.full-width{
+  width: 100%
+}
+.input-full-width {
+  width:800px;
+}
+
+.readonly {
+  color: gray;
+}
+
+.link{
+  color: cornflowerblue;
+  text-decoration: underline;
+}
+
+
+p {
+  font-size: 11px;
+  color: darkgray;
+}
+
+.remove{
+  font-size: 10px;
+  color: darkred;
+  text-align: right;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 22px;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-card{
+  margin-bottom: 20px;
+  width: 70%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  padding: 0 !important;
+
+}
+
+.mat-card-header{
+  background-color: gainsboro;
+  padding: 5px !important;
+}
+
+.mat-card-content {
+  padding: 25px !important;
+}
+
+.alert-danger  {
+  border-left: 5px solid #a94442; /* red */
+  color: #a94442;
+}
+
+.valid  {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.invalid  {
+  border-left: 5px solid #a94442; /* red */
+  /* color: crimson;
+  border-bottom: 1px solid crimson; */
+}
+
+
+.blink_me {
+  animation: blinker 1s linear infinite;
+  color: crimson;
+  font-size: 12px;
+}
+
+@keyframes blinker {
+  80% {
+    opacity: 0;
+  }
+}
+
+.matInput {
+  border: 2px dotted;
+}

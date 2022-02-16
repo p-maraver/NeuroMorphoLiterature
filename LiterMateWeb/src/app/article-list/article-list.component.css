@@ -1,0 +1,132 @@
+
+mat-sidenav-container {
+  top: 80px !important;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+mat-sidenav {
+  left: 0;
+  display: block;
+  /*height: calc(100vh - 30px);*/
+  background-color: rgb(243,243,243) ;
+  width: 290px;
+  padding: 15px;
+
+}
+.keywords{
+  color: darkolivegreen;
+  font-size: 12px;
+}
+
+#toggle-wrapper > button {
+  left: -20px;
+  background-color: rgb(243,243,243) ;
+  border: 0.5px solid ;
+  border-color: gainsboro;
+}
+
+/*.app-article-list {*/
+/*  border 2px solid red;*/
+/*}*/
+mat-sidenav-content{
+  position: relative;
+  display: inline-block;
+  overflow-x: scroll;
+  margin: 0;
+}
+
+.titleSelect > p {
+  font-size: large;
+  font-weight: bold;
+  font-family: sans-serif
+}
+
+.mat-column-reconstructions.status {
+  flex: none;
+  width: 100px;
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}
+
+.full-width{
+  width: 100%
+}
+.input-full-width {
+  width:800px;
+}
+
+.mat-row {
+  height: auto;
+}
+
+.mat-cell {
+  padding: 6px 14px 6px 0;
+}
+
+.rowStyleNegative{
+  background-color: indianred;
+}
+
+.rowStylePositive{
+  background-color: darkseagreen;
+}
+
+.rowStyleReevaluate{
+  background-color: cornflowerblue;
+}
+
+.rowStyleInaccessible{
+  background-color: lightgoldenrodyellow;
+}
+
+.rowStyleLocked .mat-cell {
+  background-color: gainsboro;
+  color: darkgray;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+
+.mat-badge-medium.mat-badge-above .mat-badge-content {
+  top: -2px;
+  right: -75px;
+  width: 60px;
+  border-radius: 6px;
+  background-color: lightgrey;
+  color: black;
+  font-size: 9px;
+
+}
+.mat-header-cell.status {
+  min-width: 150px;
+}
+.mat-header-cell {
+  padding: 0 8px;
+}
+
+.mat-radio-button {
+  margin: 2px 0 2px 0;
+
+}
+
+
+p {
+  font-size: 12px;
+}
+
+.active {
+  background-color: yellow;
+}
+
+.font {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+

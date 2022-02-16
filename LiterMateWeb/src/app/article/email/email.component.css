@@ -1,0 +1,83 @@
+mat-sidenav-container {
+  top: 130px !important;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+
+mat-sidenav {
+  left: 0;
+  display: block;
+  /*height: calc(100vh - 30px);*/
+  background-color: rgb(243,243,243) ;
+  width: 190px;
+  padding: 15px;
+
+}
+mat-sidenav-content{
+  position: relative;
+  display: inline-block;
+  width: 80%;
+  margin-top: 40px;
+  margin-left: 160px;
+}
+
+::ng-deep .mat-expansion-panel .keyWords{
+  background: yellow;
+}
+::ng-deep .mat-expansion-panel .terms{
+  background: lightskyblue;
+}
+
+.term{
+  margin-left: 25px;
+  font-size: 12px;
+  color: blue;
+}
+
+
+
+
+.full-width{
+  width: 100%
+}
+.input-full-width {
+  width:800px;
+}
+
+.mat-card{
+  border-radius: 4px;
+  margin-bottom: 20px;
+  width: 70%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  padding: 0 !important;
+
+}
+
+.mat-card-header{
+  border-radius: 4px 4px 0px 0px;
+
+  background-color: #c1cfa4;
+  color: #445c2e;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px 5px 5px;
+
+}
+.mat-card-header button {
+  background-color: #dfdfdf;
+  border: 1px solid #445c2e;
+}
+
+.mat-card-content {
+  padding: 25px !important;
+}
+
+.mat-panel-title {
+  font-weight: bold;
+}
+
+.style-success {
+  color: green;
+}

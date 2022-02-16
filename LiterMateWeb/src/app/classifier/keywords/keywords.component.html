@@ -1,0 +1,11 @@
+<p> The keywords are used to select the relevant paragraphs from the text that will be used
+to train the classifier</p>
+<div>
+<button (click) = "updateFile(file)"> Update </button>
+<div *ngIf="updated">
+  <mat-icon aria-hidden="false">check</mat-icon>
+</div>
+</div>
+<textarea [(ngModel)]="keywordList"
+        ></textarea>
+

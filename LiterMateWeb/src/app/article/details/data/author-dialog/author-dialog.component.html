@@ -1,0 +1,39 @@
+<h1 mat-dialog-title>Add/Update author Email</h1>
+<h3> {{comment}}</h3>
+<h4 *ngIf="link"><a [routerLink]="['/agenda/contacts', formGroup.get('id').value]" target="_blank">here</a></h4>
+<form [formGroup]="formGroup">
+
+  <div mat-dialog-content>
+    <mat-form-field class="full-width" [ngClass]="isInvalid()? 'invalid': 'valid'">
+      <mat-chip-list #chipListEmailList>
+        <mat-chip *ngFor="let value of formGroup.get('emailList').value; let j = index"
+                  [selectable]="selectable"
+                  [removable]="removable"
+                  (removed)="remove(value)">
+          {{value.email}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input placeholder="List of emails"
+               [matChipInputFor]="chipListEmailList"
+               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+               [matChipInputAddOnBlur]="addOnBlur"
+               (matChipInputTokenEnd)="add($event)">
+      </mat-chip-list>
+      <mat-hint *ngIf="formGroup.errors?.existEmail" align="end" class="alert-danger">At least one email required.
+      </mat-hint>
+      <mat-hint *ngIf="formGroup.errors?.validMail" align="end" class="alert-danger">Incorrect email format.
+      </mat-hint>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput placeholder="FirstName" formControlName="firstName" minlength="2">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="LastName" formControlName="lastName" minlength="2">
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onCancelClick()">Cancel</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial (click)="onNoClick()" [disabled]="formGroup.status === 'INVALID'">Add</button>
+  </div>
+</form>

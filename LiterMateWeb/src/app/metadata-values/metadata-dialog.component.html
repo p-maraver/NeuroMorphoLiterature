@@ -1,0 +1,34 @@
+<h1 mat-dialog-title></h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    Replace <b>{{data.term}}</b> in articles metadata with the term/s:
+    <br>
+    <mat-chip-list #chipList aria-label="Term selection">
+      <mat-chip
+        *ngFor="let name of data.nameList"
+        [selectable]="selectable"
+        [removable]="removable"
+        (removed)="remove(name)">
+        {{name}}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input
+        placeholder=""
+        #nameInput
+        [formControl]="nameCtrl"
+        [matAutocomplete]="auto"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="addOnBlur">
+    </mat-chip-list>
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+      <mat-option *ngFor="let name of filteredNameList | async" [value]="name">
+        {{name}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Replace</button>
+</div>

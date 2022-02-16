@@ -1,0 +1,77 @@
+.mat-panel-title {
+  font-weight: bold;
+}
+.full-width{
+  width: 100%
+}
+.input-full-width {
+  width:800px;
+}
+
+.readonly {
+  color: lightgray;
+}
+
+.link{
+  color: cornflowerblue;
+  text-decoration: underline;
+}
+
+
+p {
+  font-size: small;
+  color: grey;
+
+}
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 22px;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-card{
+  margin-bottom: 20px;
+  width: 70%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  padding: 0 !important;
+
+}
+
+.mat-card-header{
+  background-color: gainsboro;
+  padding: 5px !important;
+}
+
+.mat-card-content {
+  padding: 25px !important;
+}
+
+
+.alert-danger  {
+  border-left: 5px solid #a94442; /* red */
+  color: #a94442;
+}
+
+.valid  {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.invalid  {
+  border-left: 5px solid #a94442; /* red */
+}
+
+
+.save{
+}
+
+.close{
+  float: right;
+}
+
+.success-dialog {
+  background-color: brown;
+}

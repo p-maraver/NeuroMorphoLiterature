@@ -1,0 +1,16 @@
+<mat-accordion *ngFor="let item of sectionList">
+  <mat-expansion-panel [expanded]=true>
+    <mat-expansion-panel-header>
+      <mat-panel-title class="header">
+        <b>
+          <div [innerHTML]="item.title"></div>
+        </b>
+      </mat-panel-title>
+
+    </mat-expansion-panel-header>
+    <div *ngFor="let paragraph of item.paragraphList">
+      <p [innerHTML]="paragraph"></p>
+    </div>
+    <app-section [sectionList]="item.sectionList"></app-section>
+  </mat-expansion-panel>
+</mat-accordion>

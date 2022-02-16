@@ -1,0 +1,16 @@
+ul{
+  margin:0px 10px 0px 50px;
+  list-style-type: square;
+
+}
+
+.regular {
+  color: #2a6438;
+  text-decoration: none;
+}
+
+
+.warn{
+  color: darkred;
+  text-decoration: none;
+}

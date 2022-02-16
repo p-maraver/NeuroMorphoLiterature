@@ -1,0 +1,66 @@
+mat-sidenav-container {
+  position: relative;
+}
+.content {
+  position: fixed;
+  left: 0;
+  display: block;
+  height: calc(100vh - 30px);
+  background-color: rgb(243,243,243) ;
+  width: 160px;
+}
+
+.highlight {
+  position: fixed;
+  right: 0;
+  display: block;
+  height: calc(100vh - 30px);
+  width: 160px;
+  border-left: 3px solid #c0c375;
+}
+
+mat-sidenav-content{
+  position: relative;
+  display: inline-block;
+  width: 65%;
+  margin-left: 160px;
+}
+
+::ng-deep .mat-expansion-panel .keyWord, ::ng-deep .title #keyWord{
+  background: yellow;
+}
+
+::ng-deep .mat-expansion-panel .term, ::ng-deep .title .term{
+  background: lightgreen;
+}
+
+::ng-deep .mat-expansion-panel .species, ::ng-deep .title .species{
+  background: lightskyblue;
+}
+::ng-deep .mat-expansion-panel .tracingSystem, ::ng-deep .title .tracingSystem{
+  background: lightskyblue;
+}
+::ng-deep .mat-expansion-panel .cellType, ::ng-deep .title .cellType{
+  background: lightskyblue;
+}
+
+::ng-deep .mat-expansion-panel .brainRegion, ::ng-deep .title .brainRegion{
+  background: lightskyblue;
+}
+.term-name{
+  margin-left: 25px;
+  font-size: 14px;
+  color: gray;
+}
+
+.term-value{
+  margin-left: 35px;
+  font-size: 12px;
+  color: blue;
+}
+
+
+
+
+
+

@@ -1,0 +1,44 @@
+<mat-horizontal-stepper [linear]="isLinear" #stepper>
+  <mat-step>
+    <ng-template matStepLabel>Article data and status</ng-template>
+    <app-data
+      [article]="article"
+      [stepper]="stepper"
+      (articleStatus)="getArticleStatus($event)"
+    ></app-data>
+  </mat-step>
+  <mat-step *ngIf="showMetadata">
+    <ng-template matStepLabel>Metadata</ng-template>
+    <app-metadata
+      [article]="article"
+      [stepper]="stepper"
+    ></app-metadata>
+  </mat-step>
+  <mat-step *ngIf="showReconstructions">
+    <ng-template matStepLabel>Reconstructions</ng-template>
+    <app-reconstructions
+      [article]="article"
+      [stepper]="stepper"
+    ></app-reconstructions>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <h4 class="toggle">
+      <mat-slide-toggle (change)="unlockArticle()" [ngModel]="article?.locked" (ngModelChange)="article.locked=$event" [disabled]="!isValidForm()">
+        Unlock the article if you finished evaluating
+      </mat-slide-toggle>
+      <p>Maintain the article locked (pink) to keep working on this article evaluation in the future</p>
+    </h4>
+    You are now done
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+    </div>
+    <div class="remove">
+      <button mat-button (click)="removeArticle(article.id)">Remove article forever<mat-icon>delete_forever</mat-icon></button>
+    </div>
+
+
+  </mat-step>
+
+</mat-horizontal-stepper>

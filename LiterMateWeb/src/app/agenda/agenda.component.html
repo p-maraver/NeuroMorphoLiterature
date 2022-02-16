@@ -1,0 +1,18 @@
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened class="sidenav">
+    <button mat-button [routerLink]="['contacts']">Contacts</button>
+    <button mat-button [routerLink]="['templates']">Templates</button>
+    <button mat-button [routerLink]="['configuration']">Configuration</button>
+    <mat-nav-list>
+      <button mat-button (click)="export()">Export emails to csv</button>
+      <button *ngIf="download">
+        <a href='/assets/contacts.csv' download="contacts.csv"><mat-icon >archive</mat-icon></a>
+      </button>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+

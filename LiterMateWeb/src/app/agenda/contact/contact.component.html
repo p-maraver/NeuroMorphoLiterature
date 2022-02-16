@@ -1,0 +1,58 @@
+<form [formGroup]="formGroup">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Author Contact Information</mat-card-title>
+      <mat-card-subtitle>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-checkbox formControlName="unsubscribed">Unsubscribed</mat-checkbox>
+
+      <mat-form-field class="full-width">
+        <input matInput placeholder="FirstName" formControlName="firstName" required>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="LastName" formControlName="lastName" required>
+      </mat-form-field>
+
+<!--      <div [ngClass]="formGroup.errors?.authorList? 'invalid': 'valid'">-->
+<!--        <mat-hint *ngIf="formGroup.errors?.existEmail" align="end" class="alert-danger">At least one email required.-->
+<!--        </mat-hint>-->
+<!--        <mat-hint *ngIf="formGroup.errors?.validMail" align="end" class="alert-danger">Incorrect email format.-->
+<!--        </mat-hint>-->
+        <div formArrayName="emailList"
+             *ngFor="let value of emailList.controls; let i = index">
+
+          <ng-container [formGroupName]="i">
+            <div fxLayout="row">
+
+              <mat-form-field class="full-width">
+                <input matInput placeholder="Email" formControlName="email" required>
+              </mat-form-field>
+              <mat-checkbox formControlName="bounced">Bounced</mat-checkbox>
+              <button mat-button (click)="deleteEmail(i)">
+                <mat-icon>delete_forever</mat-icon>
+              </button>
+            </div>
+          </ng-container>
+
+        </div>
+<!--      </div>-->
+      <button mat-button (click)="addEmail()">
+        <mat-icon>library_add</mat-icon>
+        Add new email
+      </button>
+    </mat-card-content>
+    <div class="close">
+      <button mat-button (click)="close()" >Close</button>
+    </div>
+    <div class="save">
+      <button mat-button (click)="update()" [disabled]="formGroup.invalid">Save</button>
+    </div>
+  </mat-card>
+
+
+
+
+
+</form>

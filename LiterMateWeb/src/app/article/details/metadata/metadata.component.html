@@ -1,0 +1,295 @@
+<form [formGroup]="formGroup">
+  <mat-hint *ngIf="metadataFormGroup.errors" align="end" class="alert-danger">At least one data usage required.
+  </mat-hint>
+
+  <mat-card [ngClass]="formGroup.valid ? 'valid': 'invalid'">
+
+    <mat-card-header>
+      <div formGroupName="usage">
+
+        <mat-card-title>
+          <mat-checkbox formControlName="describing">Article <b>Describing</b> reconstructions
+          </mat-checkbox>
+        </mat-card-title>
+        <mat-card-subtitle>These are articles describe neuronal reconstructions in the text of the article. If the
+          reconstructions are from another article please use the shared article check-box instead
+        </mat-card-subtitle>
+      </div>
+    </mat-card-header>
+    <div formGroupName="metadata">
+      <mat-card-content *ngIf="usageFormGroup.get('describing').value">
+        <ng-template matStepLabel>Metadata</ng-template>
+        <mat-form-field *ngIf="showReconstructions2()" class="full-width">
+          <input matInput placeholder="#Reconstructions" formControlName="nReconstructions">
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-chip-list #chipListSpecies>
+            <mat-chip *ngFor="let value of metadataFormGroup.get('species').value;"
+                      [selectable]="selectable"
+                      [removable]="removable"
+                      (removed)="remove(value, 'species')">
+              {{value}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="Species"
+                   [matChipInputFor]="chipListSpecies"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                   [matChipInputAddOnBlur]="addOnBlur"
+                   (matChipInputTokenEnd)="add($event, 'species')">
+          </mat-chip-list>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-chip-list #chipListCellType>
+            <mat-chip *ngFor="let value of metadataFormGroup.get('cellType').value;"
+                      [selectable]="selectable"
+                      [removable]="removable"
+                      (removed)="remove(value, 'cellType')">
+              {{value}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="Cell Type"
+                   #cellTypeInput
+                   [matChipInputFor]="chipListCellType"
+                   [formControl]="cellTypeCtrl"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                   [matAutocomplete]="autoCellType"
+                   [matChipInputAddOnBlur]="addOnBlur">
+          </mat-chip-list>
+          <mat-autocomplete #autoCellType="matAutocomplete" (optionSelected)="selectedCellType($event)">
+            <mat-option *ngFor="let value of filteredCellType" [value]="value">
+              {{value}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-chip-list #chipListBrainRegion>
+            <mat-chip *ngFor="let value of metadataFormGroup.get('brainRegion').value;"
+                      [selectable]="selectable"
+                      [removable]="removable"
+                      (removed)="remove(value, 'brainRegion')">
+              {{value}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="Brain region"
+                   [matChipInputFor]="chipListBrainRegion"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                   [matChipInputAddOnBlur]="addOnBlur"
+                   (matChipInputTokenEnd)="add($event, 'brainRegion')">
+          </mat-chip-list>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-chip-list #chipListTracingSystem>
+            <mat-chip *ngFor="let value of metadataFormGroup.get('tracingSystem').value;"
+                      [selectable]="selectable"
+                      [removable]="removable"
+                      (removed)="remove(value, 'tracingSystem')">
+              {{value}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+
+            </mat-chip>
+            <input placeholder="Tracing system"
+                   #tracingInput
+                   [matChipInputFor]="chipListTracingSystem"
+                   [formControl]="tracingCtrl"
+                   [matAutocomplete]="autoTracingSystem"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                   [matChipInputAddOnBlur]="addOnBlur">
+          </mat-chip-list>
+          <mat-autocomplete #autoTracingSystem="matAutocomplete" (optionSelected)="selectedTracingSystem($event)">
+            <mat-option *ngFor="let value of filteredTracing | async" [value]="value">
+              {{value}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+      </mat-card-content>
+
+    </div>
+  </mat-card>
+  <mat-card [ngClass]="formGroup.valid ? 'valid': 'invalid'">
+    <mat-card-header>
+      <div formGroupName="usage">
+        <mat-card-title>
+          <mat-checkbox formControlName="sharing">Article <b>Sharing</b> reconstructions with
+            another article
+          </mat-checkbox>
+        </mat-card-title>
+        <mat-card-subtitle>These are articles use reconstructions that are already requested or deposited in
+          NeuroMorpho.Org, same
+          authors use the same reconstructions in different articles
+        </mat-card-subtitle>
+      </div>
+    </mat-card-header>
+    <mat-card-content *ngIf="usageFormGroup.get('sharing').value">
+
+      <div formGroupName="shared">
+        <button mat-button (click)="openSharedDialog()">
+          <mat-icon>library_add</mat-icon>
+          Add shared reconstructions
+        </button>
+        <div formArrayName="sharedList"
+             *ngFor="let shared of sharedFormGroup.get('sharedList').controls; let i = index">
+          <ng-container [formGroupName]="i">
+
+            <div formGroupName="data">
+              <mat-form-field class="full-width">
+                <mat-placeholder class="readonly">Title</mat-placeholder>
+                <a href="/article/{{shared.value.id}}/details" target="_blank"><input class="link" matInput formControlName="title" readonly></a>
+              </mat-form-field>
+              <mat-form-field class="full-width">
+                <mat-placeholder class="readonly">PMID</mat-placeholder>
+                <input class="readonly" matInput formControlName="pmid" readonly>
+              </mat-form-field>
+            </div>
+            <div formGroupName="metadata">
+              <mat-form-field>
+                <mat-placeholder class="readonly">Species</mat-placeholder>
+                <input class="readonly" matInput formControlName="species" readonly>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-placeholder class="readonly">Cell type</mat-placeholder>
+                <input class="readonly" matInput formControlName="cellType" readonly>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-placeholder class="readonly">Brain region</mat-placeholder>
+                <input class="readonly" matInput formControlName="brainRegion" readonly>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-placeholder class="readonly">Tracing System</mat-placeholder>
+                <input class="readonly" matInput formControlName="tracingSystem" readonly>
+              </mat-form-field>
+            </div>
+            <div formGroupName="reconstructions">
+              <div formArrayName="reconstructionsList"
+                   *ngFor="let reconstructions of shared.get(['reconstructions', 'reconstructionsList']).value; let j = index">
+                <ng-container [formGroupName]="j">
+                  <table>
+                    <td>
+                      <mat-form-field class="full-width">
+                        <mat-placeholder class="readonly">#Reconstructions</mat-placeholder>
+                        <input class="readonly" matInput formControlName="nReconstructions" readonly>
+                      </mat-form-field>
+                    </td>
+                    <td>
+                      <mat-form-field class="full-width">
+                        <mat-placeholder class="readonly">statusDetails</mat-placeholder>
+                        <input class="readonly" matInput formControlName="statusDetails" readonly>
+                      </mat-form-field>
+                    </td>
+                  </table>
+                </ng-container>
+              </div>
+            </div>
+            <button mat-button (click)="deleteShared(i)">
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+
+          </ng-container>
+
+
+        </div>
+      </div>
+
+      <!--  <mat-hint *ngIf="formGroup.errors" align="end" class="alert-danger">At least one shared article required.
+        </mat-hint>
+
+
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="metadata" *ngIf="shared.metadata !== null">
+          <div>{{shared.metadata.species}}</div>
+          <div>{{shared.metadata.brainRegion}}</div>
+          <div>{{shared.metadata.cellType}}</div>
+          <div>{{shared.metadata.tracingSystem}}</div>
+        </div>
+        <div class="metadata" *ngIf="shared.metadata === null">
+          Metadata empty: Article pending evaluation
+        </div>
+        <hr>
+        <div *ngIf="shared.reconstructions !== null">
+          <div class="reconstructions" *ngFor="let reconstructions of shared.reconstructions.reconstructionsList">
+            {{reconstructions.statusDetails}}: {{reconstructions.nReconstructions}}
+          </div>
+        </div>
+        <div *ngIf="shared.reconstructions === null">
+          Reconstructions empty: Article pending approval
+        </div>
+
+      </div>-->
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card [ngClass]="formGroup.valid ? 'valid': 'invalid'">
+    <mat-card-header formGroupName="usage">
+      <mat-card-title>
+        <mat-checkbox formControlName="citing">Article <b>Citing</b> NeuroMorpho.Org</mat-checkbox>
+      </mat-card-title>
+      <mat-card-subtitle>These are articles that cite NeuroMorpho.Org, usually describing neuronal DataBases. They
+        must contain <b>NeuroMorpho.Org</b>
+        keyWord in the article text
+      </mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+  <mat-card [ngClass]="formGroup.valid ? 'valid': 'invalid'">
+    <mat-card-header formGroupName="usage">
+      <mat-card-title>
+        <mat-checkbox formControlName="using">Article <b>Using</b> reconstructions downloaded
+          from NeuroMorpho.Org
+        </mat-checkbox>
+      </mat-card-title>
+      <mat-card-subtitle>These are articles that use reconstructions published in NeuroMorpho.Org for their
+        research.
+        They must
+        contain <b>NeuroMorpho.Org</b> keyWord in the article text, and usually cite the reconstructions used, and
+        show
+        figures with the cited reconstructions
+      </mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+  <mat-card [ngClass]="formGroup.valid ? 'valid': 'invalid'">
+    <mat-card-header formGroupName="usage">
+      <mat-card-title>
+        <mat-checkbox formControlName="about">Article <b>About</b> NeuroMorpho.Org</mat-checkbox>
+      </mat-card-title>
+      <mat-card-subtitle>These are articles that describe features from NeuroMorpho.Org. They must contain <b>NeuroMorpho.Org</b>
+        keyWord in the article text, and <b>Giorgio Ascoli</b> in the authors
+      </mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+  <mat-card [ngClass]="formGroup.valid ? 'valid': 'invalid'">
+    <mat-card-header formGroupName="usage">
+      <mat-card-title>
+        <mat-checkbox formControlName="duplicate"><b>Duplicate</b> article</mat-checkbox>
+      </mat-card-title>
+      <mat-card-subtitle>These are articles that exists already in the DataBase, usually different name or prepublished articles
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content *ngIf="usageFormGroup.get('duplicate').value">
+
+      <div formGroupName="duplicate">
+        <button mat-button (click)="openDuplicateDialog()">
+          <mat-icon>library_add</mat-icon>
+          Update duplicate article
+        </button>
+              <mat-form-field class="full-width">
+                <mat-placeholder class="readonly">Title</mat-placeholder>
+                <a href="/article/{{duplicateFormGroup.value.id}}/details" target="_blank"><input class="link" matInput formControlName="title" readonly></a>
+              </mat-form-field>
+              <mat-form-field class="full-width">
+                <mat-placeholder class="readonly">PMID</mat-placeholder>
+                <input class="readonly" matInput formControlName="pmid" readonly>
+              </mat-form-field>
+
+        </div>
+    </mat-card-content>
+  </mat-card>
+  <div>
+    <button mat-button matStepperPrevious>Back</button>
+    <button mat-button (click)="save()" [disabled]="!formGroup.valid">Save & Next</button>
+  </div>
+</form>

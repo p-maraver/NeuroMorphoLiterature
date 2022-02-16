@@ -1,0 +1,416 @@
+<mat-sidenav-container fullscreen>
+  <mat-sidenav #sidenav align="start" mode="side">
+    <div class="titleSelect">
+      <p>Collections:</p>
+      <div *ngFor="let col of collectionOptions">
+        <mat-radio-button [checked]="containsCollection(col)" (change)="collectionChange(col)">
+          <span [matBadge]="count[col]" matBadgeOverlap="false">{{col}}</span>
+
+        </mat-radio-button>
+      </div>
+    </div>
+    <div class="titleSelect" *ngIf="collection === 'Evaluated' || collection ==='Pending evaluation'">
+      <p>Dates:</p>
+      <mat-radio-group [(ngModel)]="date" (change)="dateChange($event.value)">
+        <mat-radio-button value="All">
+          <span [matBadge]="count[collection]" matBadgeOverlap="false">All</span>
+        </mat-radio-button>
+        <br>
+        <mat-radio-button value="lt:2014-01-01">
+          <span [matBadge]="count[collection + '.old']" matBadgeOverlap="false">Before 2014</span>
+        </mat-radio-button>
+        <br>
+        <mat-radio-button value="gte:2014-01-01">
+          <span [matBadge]="count[collection + '.new']" matBadgeOverlap="false">After 2014</span>
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div class="titleSelect" *ngIf="view === 'classifier'">
+      <p>Intern Evaluation:</p>
+      <mat-radio-group (change)="collectionChangeIntern($event.value)">
+        <mat-radio-button value="All">
+          <span>All</span>
+        </mat-radio-button>
+        <br>
+        <mat-radio-button value="Positive">
+          <span>Positive</span>
+        </mat-radio-button>
+        <br>
+        <mat-radio-button value="Negative">
+          <span>Negative</span>
+        </mat-radio-button>
+        <br>
+        <mat-radio-button value="Inaccessible">
+          <span>Inaccessible</span>
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div class="titleSelect" *ngIf="view === 'classifier'">
+      <p>Classifier Evaluation:</p>
+      <mat-radio-group (change)="collectionChangeClassifier($event.value)">
+        <mat-radio-button value="All">
+          <span>All</span>
+        </mat-radio-button>
+        <br>
+        <mat-radio-button value="Positive">
+          <span>Positive</span>
+        </mat-radio-button>
+        <br>
+        <mat-radio-button value="Negative">
+          <span>Negative</span>
+        </mat-radio-button>
+        <br>
+        <mat-radio-button value="Inaccessible">
+          <span>Inaccessible</span>
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div class="titleSelect" *ngIf="collection === 'Positive'">
+      <p>Usage:</p>
+      <div *ngFor="let usage of usageList">
+        <mat-radio-button [checked]="containsUsage(usage)" (change)="usageChange(usage)">
+          <span [matBadge]="count[usage]" matBadgeOverlap="false">{{usage}}</span>
+        </mat-radio-button>
+      </div>
+    </div>
+
+    <div class="titleSelect" *ngIf="collection === 'Positive'">
+      <p>Specific Details:</p>
+      <div *ngFor="let status of statusDetailsList">
+        <mat-radio-button [checked]="containsStatusDetails(status)" (change)="statusDetailsChange(status)">
+          <span [matBadge]="findStatusDetails(status)" matBadgeOverlap="false">{{status}}</span>
+        </mat-radio-button>
+      </div>
+    </div>
+
+
+  </mat-sidenav>
+  <mat-sidenav-content>
+
+    <div>
+      <div id="toggle-wrapper">
+        <button mat-button (click)="sidenav.toggle()">
+          <mat-icon>keyboard_backspace</mat-icon>
+          toggle
+        </button>
+      </div>
+      <div class="font" *ngIf="collection === 'Positive' && view !=='emails'">
+        <app-statistics></app-statistics>
+        <app-bulk-status></app-bulk-status>
+      </div>
+
+      <mat-paginator [length]="articlePage?.totalElements"
+                     [pageSize]=" 50"
+                     (page)="updatePage($event.pageIndex)">
+
+      </mat-paginator>
+      <div>
+        Create new csv report
+        <button mat-button (click)="generateReport()" *ngIf="!creating">
+          <mat-icon>insert_drive_file</mat-icon>
+        </button>
+        <span *ngIf="creating">Generating Report...</span>
+      </div>
+      <div *ngIf="exists">
+        Csv report ready to download
+        <a href="/assets/{{file}}" [download]="file">
+          <mat-icon>file_download</mat-icon>
+        </a>
+      </div>
+
+      <mat-form-field>
+        <input matInput (keyup)="updateFilter($event.target.value)" [value]="text"
+               placeholder="Search articles by exact pmid, exact doi, exact contact email, contains in author last name, or contains in title...">
+      </mat-form-field>
+
+      <div class="bulk" *ngIf="view==='emails' && status !== 'To be requested'">
+        <button mat-button (click)="sendBulkEmails(0)" *ngIf="sent===0">
+          <mat-icon>send</mat-icon>
+          Send {{getNEmails()}} Emails in Bulk
+        </button>
+        <div *ngIf="sent===1">
+          Sending {{nSent}}
+          <mat-spinner [diameter]="25"></mat-spinner>
+        </div>
+        <div *ngIf="sent===2">
+          Sent {{nSent}}
+        </div>
+      </div>
+      <table mat-table [dataSource]="articlePage?.content" matSort
+             (matSortChange)="updateSort($event.active, $event.direction)" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="collection">
+          <th mat-header-cell *matHeaderCellDef> Collection</th>
+          <td mat-cell *matCellDef="let article">
+            {{article.status}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataUsage">
+          <th mat-header-cell *matHeaderCellDef> Usage</th>
+          <td mat-cell *matCellDef="let article">
+            {{getUsage(article.data.dataUsage).join('\n ')}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="locked">
+          <th mat-header-cell *matHeaderCellDef> Locked</th>
+          <td mat-cell *matCellDef="let article">
+            <mat-icon *ngIf="article.locked">lock</mat-icon>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="data.publishedDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Published</th>
+          <td mat-cell *matCellDef="let article"> {{article.data.publishedDate}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="data.evaluatedDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Evaluated</th>
+          <td mat-cell *matCellDef="let article"> {{article.data.evaluatedDate}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="data.ocDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Found</th>
+          <td mat-cell *matCellDef="let article"> {{article.data.ocDate}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="reconstructions.expirationDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Expiration</th>
+          <td mat-cell *matCellDef="let article">
+            <div *ngIf="describingNeurons(article.data.dataUsage)">
+            <span *ngFor="let reconstruction of article.reconstructions?.reconstructionsList">
+                 {{reconstruction?.expirationDate}} </span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="reconstructions.status">
+          <th mat-header-cell class="status" *matHeaderCellDef> Status Details</th>
+          <td mat-cell *matCellDef="let article">
+            <div *ngIf="describingNeurons(article.data.dataUsage)">
+
+            <span *ngFor="let reconstruction of article?.reconstructions?.reconstructionsList">
+               <mat-select [(ngModel)]="reconstruction.statusDetails" (ngModelChange)="updated(article)">
+                <mat-option *ngFor="let status of statusDetailsList" [value]="status">
+                {{status}}
+                </mat-option>
+                </mat-select>
+            </span>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="reconstructions.nReconstructions">
+          <th mat-header-cell *matHeaderCellDef> #Reconstructions</th>
+          <td mat-cell *matCellDef="let article">
+            <div *ngIf="describingNeurons(article.data.dataUsage)">
+              <div *ngFor="let reconstruction of article?.reconstructions?.reconstructionsList">
+                <input matInput
+                       [(ngModel)]="reconstruction.nReconstructions" (change)="updated(article)">
+              </div>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="submitStatus">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+          <td mat-cell *matCellDef="let article">
+            <div *ngIf="describingNeurons(article.data.dataUsage)">
+              <div *ngIf="!article.updated">
+                <button mat-raised-button [disabled]="!article.changed"
+                        (click)="submitStatus(article)">
+                  <mat-icon aria-hidden="false">cloud_upload</mat-icon>
+                </button>
+              </div>
+              <div *ngIf="article.updated">
+                <mat-icon aria-hidden="false">check</mat-icon>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="data.pmid">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> PMID</th>
+          <td mat-cell *matCellDef="let article"> {{article.data.pmid}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="data.title">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Title</th>
+          <td mat-cell *matCellDef="let article">
+            <a href='./article/{{article.id}}' target="_blank">{{article.data.title}}</a><br>
+            <p class="keywords">{{showKeyWords(article.searchPortal).join(', ')}}</p>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="metadata">
+          <th mat-header-cell *matHeaderCellDef> Metadata</th>
+          <td mat-cell *matCellDef="let article; let i = index"
+              [ngClass]="{
+                  rowStyleNegative: (article.status === 'Evaluated' || article.status === 'Neuromorpho evaluated') && article.metadata?.articleStatus?.includes('Negative') && view === 'classifier',
+                  rowStylePositive: (article.status === 'Evaluated' || article.status === 'Neuromorpho evaluated') && article.metadata?.articleStatus?.includes('Positive') && view === 'classifier',
+                  rowStyleReevaluate: (article.status === 'Evaluated' || article.status === 'Neuromorpho evaluated') && article.metadata?.articleStatus?.includes('Pending evaluation') && view === 'classifier',
+                  rowStyleInaccessible: (article.status === 'Evaluated' || article.status === 'Neuromorpho evaluated') && article.metadata?.articleStatus?.includes('Inaccessible') && view === 'classifier'} "
+          >
+            <div *ngIf="!metadataMissingIntern(article) && article.metadata">
+              <p><b>Status</b>: {{article.metadata?.articleStatus}}</p>
+              <div *ngIf="article.metadata?.articleStatus === 'Positive' &&
+                article.data.dataUsage.includes('DESCRIBING_NEURONS') ">
+                <p><b>#Reconstructions</b>: {{article.metadata?.nReconstructions}}</p>
+                <p><b>Species</b>: {{article.metadata?.species}}</p>
+                <p><b>Brain region</b>: {{article.metadata?.brainRegion}}</p>
+                <p><b>Cell type</b>: {{article.metadata?.cellType}}</p>
+                <p><b>Tracing system</b>: {{article.metadata?.tracingSystem}}</p>
+              </div>
+              <div *ngIf="article.metadata?.articleStatus === 'Positive' &&
+                article.data.dataUsage.includes('SHARING') ">
+                <p><b>#Reconstructions</b>: Sharing</p>
+
+              </div>
+
+              <button mat-raised-button
+                      *ngIf="!article.locked && !metadataMissingIntern(article)  && view === 'classifier'"
+                      (click)="accept(i, article.id, article.metadata.articleStatus, article)">
+                <mat-icon aria-hidden="false">check</mat-icon>
+              </button>
+            </div>
+            <div *ngIf="metadataMissingIntern(article)">
+              <mat-icon aria-hidden="false">error</mat-icon>
+              <br>
+              <p>Missing metadata</p>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="comment">
+          <th mat-header-cell *matHeaderCellDef> Comment</th>
+          <td mat-cell *matCellDef="let article"> {{article.metadata?.comment}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="classifier.confidence">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Confidence</th>
+          <td mat-cell *matCellDef="let article">
+            <div *ngIf="article.classifier">
+              {{article.classifier?.confidence | number : '.2-2'}} % <br>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="classifier">
+          <th mat-header-cell *matHeaderCellDef> Classifier</th>
+          <td mat-cell *matCellDef="let article; let i = index"
+              [ngClass]="{
+                  rowStyleNegative: (article.status === 'Evaluated' || article.status === 'Neuromorpho evaluated') && article.classifier?.articleStatus.includes('Negative'),
+                  rowStylePositive: (article.status === 'Evaluated' || article.status === 'Neuromorpho evaluated') && article.classifier?.articleStatus.includes('Positive'),
+                  rowStyleReevaluate: (article.status === 'Evaluated' || article.status === 'Neuromorpho evaluated') && article.classifier?.articleStatus.includes('Pending Evaluation'),
+                  rowStyleInaccessible: (article.status === 'Evaluated' || article.status === 'Neuromorpho evaluated') && article.classifier?.articleStatus.includes('Inaccessible')}"
+          >
+            <div *ngIf="article.classifier">
+              <p><b>Status</b>: {{article.classifier?.articleStatus}}</p>
+              <!-- <p><b>Species</b>: {{article.classifier?.metadata.species}}</p>
+               <p><b>Brain region</b>: {{article.classifier?.metadata.brainRegion}}</p>-->
+              <p><b>Cell type</b>: {{article.classifier?.metadata?.cellType}}</p>
+              <p><b>Tracing system</b>: {{article.classifier?.metadata?.tracingSystem}}</p>
+              <p class="keywords"><b>Terms</b>: {{article.classifier?.termList}}</p>
+              <p class="keywords"><b>Keywords</b>:{{article.classifier?.keyWordList}}</p>
+            </div>
+            <button mat-raised-button
+                    *ngIf="!metadataMissingClassifier(article)"
+                    (click)="updateMetadata(article.id, article.classifier);
+                             accept(i, article.id, article.classifier?.articleStatus, article);
+                            ">
+              <mat-icon aria-hidden="false">check</mat-icon>
+            </button>
+            <div *ngIf="metadataMissingClassifier(article)">
+              <mat-icon aria-hidden="false">error</mat-icon>
+              <br>
+              <p>Missing metadata</p>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="accept">
+          <th mat-header-cell *matHeaderCellDef> Accept</th>
+          <td mat-cell *matCellDef="let article; let i = index">
+            <button mat-raised-button
+                    *ngIf="!article.locked && !metadataMissingIntern(article) && view !== 'classifier'"
+                    (click)="accept(i, article.id, article.metadata?.articleStatus, article)">
+              <mat-icon aria-hidden="false">check</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!--
+                        <span ng-if="author.emailList === null" class="no-email">{{author.name}}
+                            <span ng-show="!$last"><br/></span>
+                        </span>
+                        <span ng-if="author.emailList !== null" class="email" author-directive author="{{author.emailList}}"><a href='#authorView/{{author.emailList[0]}}'>{{author.name}}
+                                <span>- {{count}} {{statuses}}</span></a>
+                            <span ng-show="!$last"><br/></span>
+                        </span>
+
+                <td>
+                    <span ng-repeat="reconstructions in article.reconstructions.reconstructionsList">
+                        <span ng-if="reconstructions.statusDetails !== 'Ultimatum'" type-directive metadata="{{article.metadata.cellType}}">{{type}}</span>
+                    </span>
+                </td>
+                <td>
+                    <span ng-repeat="reconstructions in article.reconstructions.reconstructionsList">
+                        <span ng-if="reconstructions.statusDetails !== 'Ultimatum' && reconstructions.statusDetails !== 'Positive response last warn'">
+                           <a href='http://129.174.10.65:8198/article/{{article.id}}/emails/new' target="_blank">
+
+                            <button type="button" class="btn btn-xlarge btn-default" >
+                                <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                            </button></a><br>
+                            <span ng-show="!$last"><br/></span>
+                        </span>
+                    </span>
+                </td>-->
+        <ng-container matColumnDef="authors">
+          <th mat-header-cell *matHeaderCellDef> Authors</th>
+          <td mat-cell *matCellDef="let article">
+              <span *ngFor="let author of article.data.authorList">
+                <p *ngIf="author?.statuses?.length > 0">
+                  <a href="./articles/Positive?data.authorList.contactId={{author.contactId}}&view=emails">
+                  {{author.name}} <span *ngIf="author?.statuses?.length > 0">- {{author?.statuses?.length}}
+                    ({{author?.statuses?.toString()}})</span>
+                </a>
+                </p>
+                 <p *ngIf="author?.statuses?.length === 0">
+                  {{author.name}}
+                </p>
+              </span></td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="generateEmail">
+          <th mat-header-cell *matHeaderCellDef> Generate email</th>
+          <td mat-cell *matCellDef="let article">
+            <div *ngIf="describingNeurons(article.data.dataUsage)">
+
+           <span *ngFor="let reconstructions of article.reconstructions.reconstructionsList">
+             <span
+               *ngIf="reconstructions.statusDetails !== 'Ultimatum' &&
+               reconstructions.statusDetails !== 'Bounced'">
+                <a href='./article/{{article.id}}/emails/new?available={{article.data.available}}' target="_blank">
+                  <button mat-raised-button>
+                    <mat-icon aria-hidden="false">mail</mat-icon>
+                  </button>
+                </a>
+
+             </span>
+           </span>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"
+            [ngClass]="{rowStyleLocked: row.locked,
+                 rowStyleNegative: (row.status === 'Evaluated' || row.status === 'Neuromorpho evaluated') && row.metadata?.articleStatus === 'Negative'  && view !== 'classifier',
+                 rowStylePositive: (row.status === 'Evaluated' || row.status === 'Neuromorpho evaluated') && row.metadata?.articleStatus === 'Positive' && view !== 'classifier',
+                 rowStyleReevaluate: (row.status === 'Evaluated' || row.status === 'Neuromorpho evaluated') && row.metadata?.articleStatus === 'Pending evaluation' && view !== 'classifier',
+                 rowStyleInaccessible: (row.status === 'Evaluated' || row.status === 'Neuromorpho evaluated') && row.metadata?.articleStatus === 'Inaccessible' && view !== 'classifier'}"></tr>
+
+        <!--<tr mat-row *matRowDef="let row; columns: displayedColumns" let i = index; let even = even;" >-->
+      </table>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

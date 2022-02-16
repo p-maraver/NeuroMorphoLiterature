@@ -1,0 +1,25 @@
+mat-sidenav-container {
+  top: 130px !important;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+
+mat-sidenav {
+  left: 0;
+  display: block;
+  /*height: calc(100vh - 30px);*/
+  background-color: rgb(243,243,243) ;
+  width: 190px;
+  height: 500px;
+  padding: 15px;
+
+}
+mat-sidenav-content{
+  position: relative;
+  display: inline-block;
+  width: 80%;
+  margin-top: 40px;
+  margin-left: 160px;
+}
+

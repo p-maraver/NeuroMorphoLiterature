@@ -1,0 +1,72 @@
+<h3>Portals</h3>
+<table mat-table [dataSource]="portalList" class="mat-elevation-z8">
+
+  <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Position Column -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="startYear">
+    <th mat-header-cell *matHeaderCellDef> Start year </th>
+    <td mat-cell *matCellDef="let element; let i = index">{{getYear(element.startSearchDate)}}
+    </td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="endYear">
+    <th mat-header-cell *matHeaderCellDef> End year </th>
+    <td mat-cell *matCellDef="let element">{{getYear(element.endSearchDate)}}
+    </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="token">
+    <th mat-header-cell *matHeaderCellDef> Token </th>
+    <td mat-cell *matCellDef="let element">{{element.token}}
+    </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="active">
+    <th mat-header-cell *matHeaderCellDef> Will run next search </th>
+    <td mat-cell *matCellDef="let element">{{element.active}}
+    </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef> Status </th>
+    <td mat-cell *matCellDef="let element"> {{element.log.cause}} </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="success">
+    <th mat-header-cell *matHeaderCellDef> Executed on </th>
+    <td mat-cell *matCellDef="let element"> {{element.log.start | date: 'yyyy-MM-dd'}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="edit">
+    <th mat-header-cell *matHeaderCellDef> Edit </th>
+    <td mat-cell *matCellDef="let element">
+      <button (click)="openDialog(element)"> <mat-icon>edit</mat-icon> </button>
+    </td>
+
+
+  </ng-container>
+
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<h3>Run Search</h3>
+<button type="button" mat-stroked-button color="primary" (click)="startSearch()" *ngIf="!searching">Start Search</button>
+<div *ngIf="searching"> Searching
+  <mat-spinner [diameter]="25"></mat-spinner>
+</div>
+

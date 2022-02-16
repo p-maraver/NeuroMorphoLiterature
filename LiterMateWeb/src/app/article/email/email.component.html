@@ -1,0 +1,14 @@
+<mat-sidenav-container fullscreen>
+  <mat-sidenav mode="side" opened class="sidenav">
+    <mat-nav-list>
+      <button mat-button [routerLink]="['new']">Compose new email</button>
+      <button mat-button [routerLink]="['sent']">Sent emails</button>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+

@@ -1,0 +1,47 @@
+    <div class="mat-elevation-z8">
+
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+      </mat-form-field>
+<!--      <mat-checkbox formControlName="bounced"> Unsuscribed</mat-checkbox>-->
+<!--      <mat-checkbox formControlName="bounced"> Bounced</mat-checkbox>-->
+      <mat-paginator [pageSizeOptions]="[25, 50, 100]"
+                     [length]="contactPage?.totalElements"
+                     (page)="getContactListPage($event)"
+                     showFirstLastButtons></mat-paginator>
+      <table mat-table [dataSource]="contactList">
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name</th>
+          <td mat-cell *matCellDef="let element">
+            <a [title]="element.firstName  + ' details'" [routerLink]="['/agenda/contacts', element.id]" target="_blank">
+              {{ element.firstName + ' ' + element.lastName}}
+            </a>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="emailList">
+          <th mat-header-cell *matHeaderCellDef> Authors</th>
+          <td mat-cell *matCellDef="let contact">
+              <span *ngFor="let value of contact.emailList">
+                 <p>
+                  {{value.email}}
+                </p>
+              </span></td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="unsubscribed">
+          <th mat-header-cell *matHeaderCellDef> Unsubscribed</th>
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox [checked]="element.unsubscribed" (change)="update(element, $event.checked)"></mat-checkbox>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+
+    </div>

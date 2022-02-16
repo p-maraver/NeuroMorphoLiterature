@@ -1,0 +1,21 @@
+<mat-accordion *ngFor="let item of referenceList">
+  <mat-expansion-panel [expanded]=true>
+    <mat-expansion-panel-header>
+      <mat-panel-title class="header">
+        <b><span [innerHTML]="item.title"></span></b>
+      </mat-panel-title>
+
+    </mat-expansion-panel-header>
+    <span *ngFor="let author of item.authorList; let isLast=last">
+            {{author}}{{isLast ? '. ' : ', '}}</span>
+    <div *ngIf="item.journal"><span>{{item.journal}}, </span>
+      <span>{{item.volume}} ({{item.date | date:'yyyy'}}), </span>
+      <span *ngIf="item.pages">pp. {{item.pages[0]}} - {{item.pages[1]}}</span>
+    </div>
+    <div *ngIf="!item.journal">
+      <span>{{item.publisherName}}, </span>
+      <span>{{item.publisherLocation}} ({{item.date | date:'yyyy'}}), </span>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+

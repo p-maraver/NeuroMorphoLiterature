@@ -1,0 +1,51 @@
+<form [formGroup]="formGroup">
+  <ng-template matStepLabel>Reconstructions</ng-template>
+
+  <mat-card class="reconstructions">
+    <mat-card-header>
+      <mat-card-title>Reconstructions</mat-card-title>
+      <mat-card-subtitle></mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div formArrayName="reconstructionsList"
+           *ngFor="let reconstructions of reconstructionsList.controls; let i = index">
+        <ng-container [formGroupName]="i">
+          <div fxLayout="row">
+            <mat-form-field>
+              <input matInput [matDatepicker]="pick1" placeholder="Date" formControlName="date">
+              <mat-datepicker #pick1></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select formControlName="statusDetails">
+                <mat-label>Current status</mat-label>
+                <mat-option *ngFor="let status of reconstructionsStatusValues" [value]="status">
+                  {{status}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="# Reconstructions" formControlName="nReconstructions">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput [matDatepicker]="pick2" placeholder="Expiration date" formControlName="expirationDate">
+              <mat-datepicker #pick2></mat-datepicker>
+            </mat-form-field>
+            <button mat-button (click)="delete(i)">
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+          </div>
+        </ng-container>
+      </div>
+      <button mat-stroked-button color="primary" (click)="add()">Add reconstructions</button>
+    </mat-card-content>
+  </mat-card>
+
+  <div>
+    <button mat-button (click)="save()" [disabled]="!formGroup.valid">Save & Next</button>
+  </div>
+
+  <div>
+    <button mat-button (click)="metadataCall()">Call Metadata API for recovery</button>
+  </div>
+</form>
+

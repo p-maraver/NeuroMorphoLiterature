@@ -1,0 +1,46 @@
+<div *ngFor="let figure of figureList; index as i">
+  <mat-accordion>
+    <mat-expansion-panel [expanded]=true>
+      <mat-expansion-panel-header>
+        <mat-panel-title class="header">
+         <p><b>{{figure.label}}</b></p>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <!--<div class="reconstruction" >
+        <p><mat-hint>Please select all the categories or types of image. More than one category can be applied to the same figure (multi-image figures).
+          If none of the categories apply, you are not sure or it can't be determined neither by legend or image please leave empty:
+          <br> - Reconstruction for reconstructed neuron or glia skeleton,
+          <br> - Microscopy for a microscopy image,
+          <br> - Morphology for a neuronal morphology statistics figure
+          <br> - Electrophysiology for a electrophysiology statistics figure</mat-hint></p>
+
+        <mat-form-field class="example-chip-list">
+          <mat-chip-list #i aria-label="Fruit selection">
+            <mat-chip *ngFor="let labelList of figure?.category?.labelList; "
+                      [selectable]="selectable"
+                      [removable]="removable"
+                      (removed)="remove(labelList, figure)">
+              {{labelList}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="New category..."
+                   #labelInput
+                   [matChipInputFor]="i"
+                   [formControl]="categoryCtrl"
+                   [matAutocomplete]="auto"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                   [matChipInputAddOnBlur]="addOnBlur"
+                   (matChipInputTokenEnd)="add($event)">
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event, figure)">
+              <mat-option *ngFor="let categoryLabel of filteredCategoryLabel | async" [value]="categoryLabel">
+                {{categoryLabel}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-chip-list>
+        </mat-form-field>
+      </div>-->
+      <img id="image" [src]="showImage(figure.image)">
+      <div [innerHTML]="figure.caption"></div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

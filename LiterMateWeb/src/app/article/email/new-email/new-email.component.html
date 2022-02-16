@@ -1,0 +1,75 @@
+<mat-form-field class="checkbox">
+  <mat-label>Select type of email</mat-label>
+  <mat-select [(ngModel)]="emailType" (selectionChange)="generateNewEmail()">
+    <mat-option *ngFor="let emailType of emailTypes" [value]="emailType">
+      {{emailType}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+  <mat-checkbox class="checkbox" [(ngModel)]="available" (change)="generateNewEmail()">Select if returning contributors</mat-checkbox>
+
+<mat-card [formGroup]="form">
+  <mat-card-header>
+    <mat-card-title>
+      {{form?.get('type').value}} e-mail to be sent
+      on {{this.article?.reconstructions.reconstructionsList[0].expirationDate | date : "MMMM dd yyyy"  }}
+    </mat-card-title>
+    <button mat-button (click)="send()" *ngIf="sent===0">
+      <mat-icon>send</mat-icon>
+      SEND
+    </button>
+    <div *ngIf="sent===1">
+      <mat-spinner [diameter]="25"></mat-spinner>
+    </div>
+    <div *ngIf="sent===2">
+      SENT
+    </div>
+    <mat-card-subtitle>
+      Compose an e-mail if correctly sent the article reconstructions will transition to next status
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+
+    <mat-form-field class="full-width">
+      <mat-chip-list #chipListTo>
+        <mat-chip *ngFor="let value of form.get('to').value;"
+                  [selectable]="selectable"
+                  [removable]="removable"
+                  (removed)="remove(value, 'to')">
+          {{value}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input placeholder="To"
+               [matChipInputFor]="chipListTo"
+               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+               [matChipInputAddOnBlur]="addOnBlur"
+               (matChipInputTokenEnd)="add($event, 'to')">
+      </mat-chip-list>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-chip-list #chipListCC>
+        <mat-chip *ngFor="let value of form.get('cc').value;"
+                  [selectable]="selectable"
+                  [removable]="removable"
+                  (removed)="remove(value, 'cc')">
+          {{value}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input placeholder="CC"
+               [matChipInputFor]="chipListCC"
+               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+               [matChipInputAddOnBlur]="addOnBlur"
+               (matChipInputTokenEnd)="add($event, 'cc')">
+      </mat-chip-list>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Subject" formControlName="subject">
+    </mat-form-field>
+    <angular-editor [config]="editorConfig" formControlName="content">
+    </angular-editor>
+  </mat-card-content>
+
+</mat-card>

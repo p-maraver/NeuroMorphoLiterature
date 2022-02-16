@@ -1,0 +1,17 @@
+<div class="example-container">
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your email</mat-label>
+    <input matInput [ngModel]="config?.username" (ngModelChange)="config.username = $event">
+  </mat-form-field>
+</div>
+<div class="example-container">
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your password</mat-label>
+    <input matInput [type]="hide ? 'password' : 'text'" [ngModel]="config?.password" (ngModelChange)="config.password = $event">
+    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
+
+<button id="update" mat-raised-button (click)="update()">Update</button>

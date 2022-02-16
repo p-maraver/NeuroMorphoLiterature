@@ -1,0 +1,31 @@
+<h1 mat-dialog-title>Duplicate resourced found in {{data.error}}</h1>
+<div *ngIf="isPending()">
+  <div mat-dialog-content>
+    Since the duplicated article is not yet evaluated it will be removed and your changes saved
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onLinkClickPending()" cdkFocusInitial>Save</button>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+  </div>
+</div>
+
+<div *ngIf=isSameEvaluation()>
+    <div mat-dialog-content>
+      Do you want to link the articles and move to the same collection?
+    </div>
+    <div mat-dialog-actions>
+      <button mat-button (click)="onLinkClick()" cdkFocusInitial>Link</button>
+      <button mat-button (click)="onNoClick()">Cancel</button>
+    </div>
+  </div>
+
+<div *ngIf=isDistinctEvaluation()>
+  <div mat-dialog-content>
+    The evaluation of this article doesn't match the duplicate evaluation, the article will be labeled duplicate and
+    moved to be reviewed
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onLinkClickNotMatch()" cdkFocusInitial>Review</button>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+  </div>
+</div>

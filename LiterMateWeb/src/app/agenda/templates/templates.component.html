@@ -1,0 +1,49 @@
+<mat-form-field>
+  <mat-label>Select type of email</mat-label>
+  <mat-select [(ngModel)]="templateType" (selectionChange)="getTemplate()">
+    <mat-option *ngFor="let templateType of templateTypes" [value]="templateType">
+      {{templateType}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-card [formGroup]="form">
+  <mat-card-header>
+    <mat-card-title>
+      Template for email type {{form.get('type').value}}
+    </mat-card-title>
+    <button mat-button (click)="update()">UPDATE
+    </button>
+    <div *ngIf="updated">
+      <mat-icon>check</mat-icon>
+    </div>
+
+    <mat-card-subtitle>
+      The e-mail template must be written as html code. Where the following variables are computed on the server:
+      <ul>
+        <li> $&#123;subjectType}: Glia or neuron</li>
+        <li> $&#123;dears}: Computes the name of the authors for the Dear content</li>
+        <li> $&#123;authors}: Computes the name of the authors</li>
+        <li> $&#123;journal}: The journal name of the article</li>
+        <li> $&#123;publishedYear}: Contains the published year of the article</li>
+        <li> $&#123;publication}: "your publication/preprint with"</li>
+        <li> $&#123;title}: The title of the article</li>
+        <li> $&#123;type}: Glia or neuron</li>
+        <li> $&#123;glial}: "and glial" if Glia type</li>
+        <li> $&#123;tracingSystem}: Contains the metadata tracing system</li>
+        <li> $&#123;tracingSystemFormat}: Contains the tracing system format associated to the metadata tracing system</li>
+        <li> $&#123;waitingDate}: Until which date are we wating to move the article to "No Reponse"</li>
+
+      </ul>
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Subject" formControlName="subject">
+    </mat-form-field>
+    <angular-editor [config]="editorConfig" formControlName="content">
+    </angular-editor>
+  </mat-card-content>
+
+</mat-card>

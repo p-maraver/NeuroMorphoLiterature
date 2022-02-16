@@ -1,0 +1,36 @@
+button{
+  font-weight: bold;
+  border: none;
+  padding: 15px;
+  background: #c0c375;
+  color: #2a6438;
+}
+
+
+nav{
+  position: relative;
+  background: #c0c375;
+  color: #2a6438;
+}
+
+mat-icon{
+  color: #2a6438;
+}
+
+.numbers {
+  color: #c0c375;
+  background: #2a6438;
+  border-radius: 4px;
+  padding: 4px;
+  width: 100px;
+  height: 30px;
+  margin: 6px;
+  font-weight: normal;
+  font-size: small;
+}
+
+.module:hover {
+  background-color: #eee;
+  cursor: pointer;
+  color: #c0c375;
+}

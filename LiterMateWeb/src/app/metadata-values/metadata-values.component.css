@@ -1,0 +1,27 @@
+mat-sidenav-container {
+  position: relative;
+  display: flex;
+ flex-direction: row;
+}
+mat-sidenav {
+  position: relative;
+  left: 0;
+  display: block;
+  height: calc(100vh - 30px);
+  background-color: rgb(243,243,243) ;
+  width: 20vw;
+  padding: 15px;
+
+
+
+}
+mat-sidenav-content{
+  position: relative;
+  display: block;
+  width: 80vw;
+  margin-left: 160px;
+}
+
+.icon {
+  font-size: 16px;
+}

@@ -1,0 +1,7 @@
+<nav mat-tab-nav-bar>
+  <a mat-tab-link [routerLink]="['details']">Details</a>
+  <a mat-tab-link *ngIf="exists !== 'EMPTY'" (click)="openFullText()">
+    <div class="blink_me" >New!!</div><br>{{exists.charAt(0) + exists.substring(1).toLowerCase()}}</a>
+  <a *ngIf="article?.reconstructions" mat-tab-link [routerLink]="['emails']">Emails</a>
+</nav>
+<router-outlet></router-outlet>

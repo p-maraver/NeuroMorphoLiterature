@@ -1,0 +1,148 @@
+<ul>
+  <h3>Articles Pending Evaluation</h3>
+  <h4>Reconstructions: {{total | async}} - NeuroMorpho.Org: {{neuromorpho | async}}</h4>
+  <li>
+    <a
+      [ngClass]="{'regular': (positivesH | async) === 0, 'warn': (positivesH | async) > 0 }"
+      routerLink="/articles/ToBeEvaluated"
+      [queryParams]="{'classifier.articleStatus': 'Positive H'}">
+      <div>
+        <h4>Evaluate Positive articles high confidence published - <span
+          class="numbers">{{positivesH | async}}</span>
+        </h4>
+      </div>
+    </a>
+  </li>
+  <li>
+    <a
+      [ngClass]="{'regular': (review | async) === 0, 'warn': (review | async) > 0 }"
+      routerLink="/articles/ToBeEvaluated"
+      [queryParams]="{'classifier.articleStatus': 'Review'}">
+      <div>
+        <h4>Evaluate articles low confidence - <span
+          class="numbers">{{review | async}}</span>
+        </h4>
+      </div>
+    </a>
+  </li>
+  <li>
+    <a
+      [ngClass]="{'regular': (neuromorpho|async) === 0, 'warn': (neuromorpho|async) > 0 }"
+      routerLink="/articles/NeuroMorpho">
+      <div>
+        <h4>Evaluate articles that may contain the keyword NeuroMorpho.Org - <span
+          class="numbers"> {{neuromorpho|async}}</span></h4>
+      </div>
+    </a>
+  </li>
+  <li>
+    <a
+      [ngClass]="{'regular':  (manualIntervention | async) === 0, 'warn': (manualIntervention | async) > 0 }"
+      routerLink="/articles/ToBeEvaluated"
+      [queryParams]="{'identifiers': 'false', 'classifier': 'false'}">
+      <div>
+        <h4>Add PMCID, DOI, and/or PDF Link if available, otherwise upload the PDF file, if none are available evaluate
+          as Inaccessible - <span
+            class="numbers">{{manualIntervention | async}}</span></h4>
+      </div>
+    </a>
+  </li>
+  <li>
+    <a
+      [ngClass]="{'regular': (inaccessible | async)  === 0, 'warn': (inaccessible | async)  > 0 }"
+      routerLink="/articles/ToBeEvaluated" [queryParams]="{'metadata.articleStatus': 'Inaccessible'}">
+      <div>
+        <h4>Review Inaccessible articles, upload the PDF if available - <span
+          class="numbers">{{inaccessible | async}}</span></h4>
+      </div>
+    </a>
+  </li>
+  <li>
+    <a
+      [ngClass]="{'regular': (pendingClassifier | async) === 0, 'warn': (pendingClassifier | async) > 0 }"
+      routerLink="/articles/ToBeEvaluated" [queryParams]="{'classifier': 'false', 'identifiers': 'true'}">
+      <div>
+        <h4>Pending for classifier - <span
+          class="numbers">{{(pendingClassifier | async)}}</span></h4>
+      </div>
+    </a>
+  </li>
+</ul>
+
+<ul>
+  <h3>Articles Pending Review</h3>
+  <li>
+    <a
+      [ngClass]="{'regular': (evaluated|async) === 0, 'warn': (evaluated|async) > 0 }"
+      routerLink="/articles/Evaluated" [queryParams]="{}">
+      <div>
+        <h4>Review evaluated articles that contain reconstructions - <span
+          class="numbers">{{evaluated|async}}</span></h4>
+      </div>
+    </a>
+  </li>
+  <li>
+    <a
+      [ngClass]="{'regular': (neuromorphoEvaluated|async) === 0, 'warn': (neuromorphoEvaluated|async) > 0 }"
+      routerLink="/articles/NeuroMorphoEvaluated">
+      <div>
+        <h4>Review evaluated articles that contain the keyword NeuroMorpho.Org - <span
+          class="numbers">{{neuromorphoEvaluated|async}}</span></h4>
+      </div>
+    </a>
+  </li>
+
+</ul>
+
+
+<ul>
+  <h3>Release</h3>
+  <li>
+    <a class="regular"
+       href="http://129.174.10.65:8080/NMOLiteratureWeb/release/releaseMenu.html#/release">
+      <div>
+        <h4>Release the literature, last release version {{version?.version}}
+          on {{version?.date | date :  "MMMM d" }} </h4>
+      </div>
+    </a>
+  </li>
+  <h3>Emails</h3>
+
+  <li *ngFor="let email of emailOptionsPending">
+    <a [ngClass]="{'regular': email.nArticles === 0, 'warn': email.nArticles > 0 }"
+       routerLink="/articles/Positive"
+       [queryParams]="{'reconstructions.currentStatusList.specificDetails': email.status, view: 'emails'}">
+      <div>
+        <h4>Contact authors to request reconstructions for {{email.status}} - <span
+          class="numbers">{{email.nArticles}}</span></h4>
+      </div>
+    </a>
+  </li>
+  <li *ngFor="let email of emailOptionsPendingInterns">
+    <a
+      [ngClass]="{'regular': email.nArticles === 0, 'warn': email.nArticles }"
+      routerLink="/articles/Positive"
+      [queryParams]="{'reconstructions.currentStatusList.specificDetails': email.status, view: 'emails'}">
+      <div>
+        <h4>Emails {{email.status}}, find a new email for contacting - <span class="numbers">{{email.nArticles}}</span>
+        </h4>
+      </div>
+    </a>
+  </li>
+</ul>
+
+<ul>
+  <h3>Search</h3>
+
+  <li>
+    <a class="regular"
+       routerLink="/search/portals">
+      <div>
+        <h4>Search articles from portals, status:</h4>
+        <p *ngFor="let portal of portalList">{{portal.name}} - {{portal.log.start | date :  "MMMM d"}}
+          - {{portal.log.cause}}</p>
+      </div>
+    </a>
+  </li>
+
+</ul>

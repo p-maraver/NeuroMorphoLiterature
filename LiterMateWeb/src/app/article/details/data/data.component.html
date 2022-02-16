@@ -1,0 +1,235 @@
+<h4 class="toggle">
+  <mat-slide-toggle (change)="lockArticle()" [ngModel]="article?.locked" (ngModelChange)="article.locked=$event"
+                    [disabled]="!isValidForm()">Lock
+    the article prior to start
+  </mat-slide-toggle>
+  <p>If the article is locked (pink) someone else is working on it</p>
+</h4>
+<form [formGroup]="formGroup">
+  <mat-card class="articleStatus" formGroupName="status">
+    <mat-card-header>
+
+      <mat-card-title>Article Status</mat-card-title>
+
+      <mat-card-subtitle>An article is <b>Positive</b> if either describes neuronal reconstructions or the keyword
+        NeuroMorpho.Org is found in the text.
+        Otherwise is <b>Negative</b>. An article is <b>Inaccessible</b> if you can't access the text to evaluate it,
+        search for the title in GoogleScholar before selecting Inaccessible.
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-checkbox class="hide" formControlName="internEvaluation" disabled="false">Move to evaluated collection</mat-checkbox>
+
+      <!--
+      <mat-checkbox class="hide" formControlName="internEvaluation" disabled="{{disabled}}">Move to evaluated collection</mat-checkbox>
+-->
+      <p>This box is checked by default for interns evaluation: The article will be moved and/or stay in
+        Evaluated collection. It unchecked means the reviewer approves the evaluation and moves the article to a final
+        collection.</p>
+      <mat-form-field class="full-width">
+        <mat-select placeholder="status" formControlName="articleStatus" required
+                    (selectionChange)="emitArticleStatus()">
+          <mat-option *ngFor="let col of collectionOptions" [value]="col">
+            {{col}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br>
+      <mat-checkbox formControlName="negativeIfNoAnswer">Negative if no answer</mat-checkbox>
+      <p>Select <b>Negative if no answer</b> if the article is Positive with low confidence</p>
+
+      <mat-form-field class="full-width" [ngClass]="statusFormGroup.errors?.required? 'invalid': 'valid'"
+                      class="full-width">
+        <textarea matInput
+                  cdkTextareaAutosize
+                  cdkAutosizeMinRows="2"
+                  cdkAutosizeMaxRows="20"
+                  placeholder="Comment: explain the reasons that make you select the value for article status"
+                  formControlName="comment"></textarea>
+        <mat-hint *ngIf="statusFormGroup.errors?.required">Comment is mandatory for
+          Positive, Negative, Inaccessible evaluations.
+        </mat-hint>
+      </mat-form-field>
+      <p class="keywords"><b>Terms</b>: {{article?.classifier?.termList}}</p>
+      <p class="keywords"><b>Keywords</b>:{{article?.classifier?.keyWordList}}</p>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="articleData" formGroupName="data" [ngClass]="formGroup.errors?.required? 'invalid': 'valid'">
+    <mat-card-header>
+      <mat-card-title>Article Data</mat-card-title>
+      <mat-card-subtitle>Please fill all the mandatory fields that are missing</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field class="full-width">
+        <textarea matInput placeholder="Title" formControlName="title" required></textarea>
+        <mat-hint *ngIf="dataFormGroup.controls['title'].errors?.pattern?.requiredPattern">
+          Update the title if does not match real article title, or if incompleete (contains …)
+        </mat-hint>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="PMID" formControlName="pmid">
+        <mat-hint *ngIf="dataFormGroup.controls['pmid'].errors?.pattern?.requiredPattern">
+          Only numbers are allowed for pmid
+        </mat-hint>
+        <button *ngIf="this.dataFormGroup.get('pmid').value !==null" mat-button matPrefix mat-icon-button
+                (click)="navigate('pubmed')">
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+        <button mat-button matSuffix mat-button (click)="retrieveArticleDataFromPubMed('pubmed')">
+          <img src="assets/img/pubmed.jpg" width="70"/>
+        </button>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="PMCID" formControlName="pmcid">
+        <mat-hint *ngIf="dataFormGroup.controls['pmcid'].errors?.pattern?.requiredPattern">
+          Only numbers are allowed for pmcid
+        </mat-hint>
+        <button *ngIf="this.dataFormGroup.get('pmcid').value !==null" mat-button matPrefix mat-icon-button
+                (click)="navigate('pubmedcentral')">
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+        <button mat-button matSuffix mat-button (click)="retrieveArticleDataFromPubMed('pmc')">
+          <img src="assets/img/pmc.png" width="70"/>
+        </button>
+      </mat-form-field>
+      <div>
+        <mat-form-field [ngClass]="formGroup.errors?.required? 'invalid': 'valid'" class="full-width">
+          <input matInput placeholder="DOI" formControlName="doi">
+          <button *ngIf="this.dataFormGroup.get('doi').value !==null" mat-button matPrefix mat-icon-button
+                  (click)="navigate('doi')">
+            <mat-icon>open_in_new</mat-icon>
+
+          </button>
+          <button mat-button matSuffix mat-button (click)="retrieveArticleDataFromCrossRef()">
+            <img src="assets/img/doi.gif" width="70"/>
+          </button>
+          <mat-checkbox formControlName="notDoi">No DOI found</mat-checkbox>
+          <mat-hint>Don't include the url http://dx.doi.org/ in the DOI</mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="full-width">
+
+
+        <input matInput placeholder="Upload article PDF" *ngIf="sent===0">
+        <div *ngIf="sent===1">
+          <mat-spinner [diameter]="25"></mat-spinner>
+        </div>
+        <div *ngIf="sent===2">
+          Success Upload
+        </div>
+        <div *ngIf="sent===3">
+          Error!
+        </div>
+        <input class="ng-hide" id="FileUploadInput" multiple type="file" (change)=extractText($event)/>
+      </div>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="PdfLink" formControlName="pdfLink">
+        <button *ngIf="this.dataFormGroup.get('pdfLink').value !==null" mat-button matPrefix mat-icon-button
+                (click)="navigate('pdfLink')">
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Link" formControlName="link">
+        <button *ngIf="this.dataFormGroup.get('link').value !==null" mat-button matPrefix mat-icon-button
+                (click)="navigate('link')">
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Journal" formControlName="journal" required>
+        <mat-hint *ngIf="dataFormGroup.controls['journal'].errors?.pattern?.requiredPattern">
+          Update the journal if does not match real journal name, or if incomplete (contains …)
+        </mat-hint>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput [matDatepicker]="pick1" placeholder="Published date" formControlName="publishedDate"
+               required>
+        <mat-datepicker-toggle matSuffix [for]="pick1"></mat-datepicker-toggle>
+        <mat-datepicker #pick1></mat-datepicker>
+      </mat-form-field>
+      <div fxLayout="row">
+        <mat-form-field>
+          <mat-placeholder class="readonly">OC date</mat-placeholder>
+          <input class="readonly" matInput [matDatepicker]="pick2" formControlName="ocDate"
+                 readonly>
+          <mat-datepicker #pick2></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-placeholder #divClick class="readonly">Evaluated date</mat-placeholder>
+          <input class="readonly" matInput [matDatepicker]="pick3"
+                 formControlName="evaluatedDate" readonly>
+          <mat-datepicker #pick3></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-placeholder class="readonly">Approved date</mat-placeholder>
+          <input class="readonly" matInput [matDatepicker]="pick4"
+                 formControlName="approvedDate" readonly>
+          <mat-datepicker #pick4></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div [ngClass]="formGroup.errors?.authorList? 'invalid': 'valid'">
+        <div formArrayName="authorList"
+             *ngFor="let author of authorList.controls; let i = index">
+
+          <ng-container [formGroupName]="i">
+            <div fxLayout="row">
+              <div *ngIf="dataFormGroup.value.authorList[i].contactId != null ">
+                <mat-form-field class="readonly">
+                  <input matInput placeholder="Author name" formControlName="name" required readonly>
+                </mat-form-field>
+                <mat-form-field class="full-width" class="readonly">
+                  <input class="readonly" matInput placeholder="List of emails" formControlName="emailList" required
+                         readonly>
+                </mat-form-field>
+                <button *ngIf="dataFormGroup.value.authorList[i].contactId != null" mat-button
+                        (click)="openContact(author.value, i)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </div>
+              <div *ngIf="dataFormGroup.value.authorList[i].contactId == null ">
+                <mat-form-field>
+                  <input matInput placeholder="Author name" formControlName="name" required>
+                </mat-form-field>
+                <button mat-button (click)="editAuthor(i)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </div>
+              <button mat-button (click)="deleteEmail(i)">
+                <mat-icon>alternate_email</mat-icon>
+              </button>
+              <button mat-button (click)="deleteAuthor(i)">
+                <mat-icon>delete_forever</mat-icon>
+              </button>
+
+            </div>
+          </ng-container>
+          <mat-hint *ngIf="formGroup.errors?.existEmail">At least one email required.
+          </mat-hint>
+          <mat-hint *ngIf="formGroup.errors?.validMail">Incorrect email format.
+          </mat-hint>
+          <mat-hint *ngIf="formGroup.errors?.fullNameEmail">First name for last author mandatory.
+          </mat-hint>
+        </div>
+      </div>
+      <button mat-button (click)="addAuthor()">
+        <mat-icon>library_add</mat-icon>
+        Add new author
+      </button>
+
+      <div *ngFor="let portal of article?.searchPortal | keyvalue">
+        <p><b>{{portal.key}}</b>: {{portal.value}}</p>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+
+  <div>
+    <button mat-button (click)="save()" [disabled]="!formGroup.valid">Save & Next</button>
+  </div>
+
+
+</form>
+

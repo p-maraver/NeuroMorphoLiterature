@@ -1,0 +1,31 @@
+<div class="input-group">
+  <h5>Add comma separated pmids to update status details and select status from in first drop down and status to in
+    second drop down: </h5>
+  <textarea cols="40" rows="5" [(ngModel)]="pmidCommaList" ng-list required
+            placeholder="Comma separated pmids"></textarea>
+  <mat-form-field appearance="fill">
+    <mat-label>Status details from</mat-label>
+    <mat-select [(ngModel)]="statusDetailsFrom">
+      <mat-option *ngFor="let details of statusDetailsList" [value]="details">
+        {{details}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Status details to</mat-label>
+    <mat-select [(ngModel)]="statusDetailsTo">
+      <mat-option *ngFor="let details of statusDetailsList" [value]="details">
+        {{details}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-raised-button
+          (click)="submitStatusList()">
+    <mat-icon aria-hidden="false">cloud_upload</mat-icon>
+  </button>
+  <p *ngIf="!statusListUpdated">{{error}}</p>
+
+  <div ng-show="statusListUpdated" class="ng-hide"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></div>
+
+</div>
