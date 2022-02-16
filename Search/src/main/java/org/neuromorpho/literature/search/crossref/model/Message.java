@@ -73,10 +73,14 @@ public class Message {
     }
 
     public String getHtmlLink() {
-        for (Link link: this.linkList){
-            if (link.getContentType().equals("text/html")){
-                return link.getUrl();
+        try {
+            for (Link link : this.linkList) {
+                if (link.getContentType().equals("text/html")) {
+                    return link.getUrl();
+                }
             }
+        } catch (NullPointerException ex){
+            return null;
         }
         return null;
     }

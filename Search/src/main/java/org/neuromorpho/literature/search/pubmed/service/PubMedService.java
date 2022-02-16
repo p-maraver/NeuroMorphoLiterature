@@ -36,6 +36,7 @@ import org.xml.sax.InputSource;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 import java.io.StringReader;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -99,9 +100,13 @@ public class PubMedService {
         if (sortDateStr.isEmpty()){
             sortDateStr = (String) articleValues.get("pubdate");
         }
-        
-        article.setPublishedDate(assembler.tryParseDate(sortDateStr));
-        
+        LocalDate publishedDate = assembler.tryParseDate(sortDateStr);
+        if (publishedDate == null){
+            sortDateStr = ((String) articleValues.get("sortpubdate")).split(" ")[0];
+        }
+        publishedDate = assembler.tryParseDate(sortDateStr);
+        article.setPublishedDate(publishedDate);
+
         List<Author> authorList = new ArrayList();
 
         if (db.equals(Article.DB.PUBMED)) {

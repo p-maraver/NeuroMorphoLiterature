@@ -54,7 +54,11 @@ public class Figure {
     }
 
     public String getReference() {
-        return this.graphic.getReference();
+        try {
+            return this.graphic.getReference();
+        } catch (NullPointerException ex){
+            return "";
+        }
     }
 }
 

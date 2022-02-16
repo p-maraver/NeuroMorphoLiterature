@@ -19,7 +19,6 @@ package org.neuromorpho.literature.search.dto.fulltext.jats;
 
 
 import org.neuromorpho.literature.search.dto.fulltext.FigureDto;
-import org.neuromorpho.literature.search.dto.fulltext.jats.pubmed.FigureDownloadDtoAssembler;
 import org.neuromorpho.literature.search.model.Portal;
 import org.neuromorpho.literature.search.service.jats.model.fulltext.Figure;
 import org.slf4j.Logger;
@@ -33,17 +32,7 @@ public class FigureDtoAssembler {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private FigureDownloadDtoAssembler pubmedDownload =
-            new FigureDownloadDtoAssembler();
-    private org.neuromorpho.literature.search.dto.fulltext.jats.springernature.FigureDownloadDtoAssembler springerNatureDownload =
-            new org.neuromorpho.literature.search.dto.fulltext.jats.springernature.FigureDownloadDtoAssembler();
-
-
     protected List<FigureDto> createFigureListDto(List<Figure> figureList, Portal portal, String value) {
-        //PubMedCentral
-        if (portal.getName().equals("PubMedCentral") && !figureList.isEmpty()) {
-            pubmedDownload.download(value);
-        }
         List<FigureDto> figureDtoList = new ArrayList();
         for (Figure figure : figureList) {
             FigureDto figureDto = this.createFiguretDto(figure, portal, value);
@@ -56,11 +45,6 @@ public class FigureDtoAssembler {
         FigureDto figureDto = new FigureDto();
         figureDto.setLabel(figure.getLabel());
         figureDto.setCaption(figure.getCaption());
-        if (portal.getName().equals("PubMedCentral")) {
-            figureDto.setImage(pubmedDownload.readFigure(figure.getReference()));
-        } else if (portal.getName().equals("SpringerNature")) {
-            figureDto.setImage(springerNatureDownload.download(figure.getReference(), doi));
-        }
         return figureDto;
     }
 
