@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
@@ -35,11 +36,15 @@ public class PdfCommunication {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     public String extractPdfContent(String link) {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = uri + "?link=" + link;
-        log.debug("Creating rest connection for URI: " + url);
-        Map<String, String> text = restTemplate.getForObject(url, Map.class);
-        return text!=null? text.get("text"): null;
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            String url = uri + "?link=" + link;
+            log.debug("Creating rest connection for URI: " + url);
+            Map<String, String> text = restTemplate.getForObject(url, Map.class);
+            return text != null ? text.get("text") : null;
+        } catch (HttpServerErrorException ex){
+            return null;
+        }
     }
 
 

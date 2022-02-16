@@ -91,6 +91,9 @@ public class ArticleData {
     @JsonIgnore
     public Boolean hasCompleteData() {
         List<Integer> emailIndexList = new ArrayList<>();
+        if (this.authorList == null){
+            return Boolean.FALSE;
+        }
         for (Integer i = 0; i < this.authorList.size(); i++) {
             if (this.authorList.get(i).hasEmail()) {
                 emailIndexList.add(i);

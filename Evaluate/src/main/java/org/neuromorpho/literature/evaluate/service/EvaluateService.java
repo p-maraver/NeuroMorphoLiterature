@@ -119,6 +119,7 @@ public class EvaluateService {
             if (articleContent.hasText()) {
                 this.updateAccessible(status, article);
                 if (articleContent.getAuthorList() != null &&
+                        article.getAuthorList() != null &&
                         article.getAuthorList().stream().allMatch(author -> author.getContactId() == null) &&
                         articleContent.getAuthorList().stream().anyMatch(author -> author.getEmail() != null)) {
                     List<Map> authorList = this.updateContactList(articleContent.getAuthorList());

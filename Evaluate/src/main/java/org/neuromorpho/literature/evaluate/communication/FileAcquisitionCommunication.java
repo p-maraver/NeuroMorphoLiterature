@@ -22,8 +22,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -34,13 +36,17 @@ public class FileAcquisitionCommunication {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     public List<String> extractFileLinks(String link) {
-        log.debug("Extracting PDF links from: " + link);
+        try {
+            log.debug("Extracting PDF links from: " + link);
 
-        RestTemplate restTemplate = new RestTemplate();
-        String url = uri;
-        File file = new File(link, "PDF");
-        log.debug("Creating rest connection for URI: " + url);
-        return restTemplate.postForObject(url, file, List.class);
+            RestTemplate restTemplate = new RestTemplate();
+            String url = uri;
+            File file = new File(link, "PDF");
+            log.debug("Creating rest connection for URI: " + url);
+            return restTemplate.postForObject(url, file, List.class);
+        } catch (HttpClientErrorException ex){
+            return new ArrayList<>();
+        }
 
     }
 
