@@ -69,7 +69,7 @@ public class ArticleData {
     public void setAuthorList(List<Author> authorList) {
         this.authorList = authorList;
     }
-
+    
     public Boolean firstAuthorHasEmail() {
         return this.authorList.get(0).getContactId() != null;
 
@@ -151,4 +151,11 @@ public class ArticleData {
     }
 
 
+    public void removeBouncedAuthor(ObjectId contactId){
+        for (Author author: this.authorList){
+            if (author.getContactId()!= null && author.getContactId().equals(contactId)){
+                author.setContactId(null);
+            }
+        }
+    }
 }

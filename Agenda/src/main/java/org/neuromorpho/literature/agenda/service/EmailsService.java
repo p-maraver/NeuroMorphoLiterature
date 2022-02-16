@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *  
+ *
  */
 
 package org.neuromorpho.literature.agenda.service;
@@ -85,7 +85,7 @@ public class EmailsService {
 
     @Autowired
     private ContactRepository contactRepository;
-    
+
     @Autowired
     private TemplateRepository templateRepository;
 
@@ -98,6 +98,17 @@ public class EmailsService {
 
         log.debug("Preparing email: " + emailType);
         Email template = templateRepository.findOneByType(emailType);
+        Set<String> emailList = new HashSet<>();
+        for (ObjectId objectId : article.getContactListId()) { // remove bounced authors
+            Contact contact = contactRepository.findContact(objectId);
+            if (contact != null) {
+                if (contact.existNotBounced()) {
+                    emailList.addAll(contact.getEmailSet());
+                } else {
+                    article.removeBouncedAuthor(contact.getId());
+                }
+            }
+        }
         List<Metadata> tracingSystemList = new ArrayList<>();
         for (String tracingSystem : article.getTracingSystemList()) {
             tracingSystemList.add(metadataCommunication.findMetadataByName(tracingSystem));
@@ -106,11 +117,6 @@ public class EmailsService {
         email.setIdArticle(article.getId());
         email.setType(emailType);
         email.setIdArticle(article.getId());
-        Set<String> emailList = new HashSet<>();
-        for (ObjectId objectId: article.getContactListId()){
-            Contact contact = contactRepository.findContact(objectId);
-            emailList.addAll(contact.getEmailSet());
-        }
         email.setTo(new ArrayList<>(emailList));
         email.setCc(Arrays.asList(cc));
 
@@ -233,8 +239,8 @@ public class EmailsService {
             Store store = session.getStore("imaps");
             store.connect();
             LocalDate date = LocalDate.of(2020, 1, 1);
-            
-            SearchTerm newerThan = new ReceivedDateTerm(ComparisonTerm.GT, 
+
+            SearchTerm newerThan = new ReceivedDateTerm(ComparisonTerm.GT,
                     Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()));
             Folder inbox = store.getFolder(folder);
             //create the folder object and open it
@@ -249,7 +255,7 @@ public class EmailsService {
                     log.debug("Date: " + message.getReceivedDate());
                     log.debug("Subject: " + message.getSubject());
                     log.debug("From: " + message.getFrom()[0]);
-                    
+
                     if (//message.getReceivedDate().getYear() > 2017 && 
                             (message.getFrom()[0].toString().toLowerCase().contains("mail delivery") ||
                                     message.getFrom()[0].toString().toLowerCase().contains("microsoft outlook") ||
@@ -279,9 +285,9 @@ public class EmailsService {
                             for (String id : articleIdList) {
                                 // check if there is a new email for the bounced author
                                 String reconstructionsStatus = "Bounced";
-                                if (contact.existNotBounced()){
+                                if (contact.existNotBounced()) {
                                     reconstructionsStatus = "Not bounced";
-                                } 
+                                }
                                 articleCommunication.update2Status(id, reconstructionsStatus);
                             }
                         }

@@ -225,4 +225,8 @@ public class Article {
     public Boolean isDissertation(){
         return this.data.isDissertation();
     }
+    
+    public void removeBouncedAuthor(ObjectId contactId){
+        this.data.removeBouncedAuthor(contactId);
+    }
 }
