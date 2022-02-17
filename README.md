@@ -1,6 +1,6 @@
 # NeuroMorphoLiterature
 NeuroMorpho.Org literature
 
-Installation documentation can be found under docs folder
+Under docs folder the documentation about the installation can be found
 
-Api Documentation can be found under apidocs folder
+Under apidocs folder the Api Documentation can be found
