@@ -154,12 +154,20 @@ export class ArticleListComponent implements OnInit, OnDestroy {
 
   }
 
-  getArticleList(): void {
+  async getArticleList(): Promise<void> {
     let searchText = 'page=' + this.page +
       '&sortDirection=' + this.sortDirection +
       '&sortProperty=' + this.sortProperty;
     if (this.text != null && this.text !== '') {
-      searchText = searchText + '&text=' + this.text;
+      if (this.text.includes('@')) {
+        // Search for the name on contacts
+        const contactList = await this.emailService.findContactListAsync(0, 10, this.text);
+        if (contactList.content.length > 0) {
+          searchText = searchText + '&data.authorList.contactId=' + contactList.content[0].id;
+        }
+      } else {
+        searchText = searchText + '&text=' + this.text;
+      }
     }
     const collection = Collection[this.route.snapshot.paramMap.get('collection')];
 
