@@ -238,29 +238,30 @@ export class MetadataComponent implements OnInit, OnChanges {
         if (sharedList.value.some(e => e.id === shared.id)) {
           this.snackBar.open('The article you are trying to link is already linked', 'Error');
         }
+        sharedList.push(this._formBuilder.group({
+          id: shared.id,
+          data: this._formBuilder.group({
+            title: shared.data.title,
+            pmid: shared.data.pmid
+          }),
+          metadata: this._formBuilder.group({
+            species: shared.metadata.species == null ? null : shared.metadata.species[0],
+            cellType: shared.metadata.cellType == null ? null : shared.metadata.cellType[0],
+            brainRegion: shared.metadata.brainRegion == null ? null : shared.metadata.brainRegion[0],
+            tracingSystem: shared.metadata.tracingSystem == null ? null : shared.metadata.tracingSystem[0]
+          }),
+          reconstructions: this._formBuilder.group({
+            reconstructionsList: this._formBuilder.array(this.fillReconstructionsList(shared.id, shared.reconstructions))
+          })
+        }));
         if (shared.data.dataUsage.includes(Usage.Describing) &&
           (shared.status === Collection.Positive || shared.status === Collection.Evaluated)) {
           this.sharedFormGroup.markAsDirty();
-          sharedList.push(this._formBuilder.group({
-            id: shared.id,
-            data: this._formBuilder.group({
-              title: shared.data.title,
-              pmid: shared.data.pmid
-            }),
-            metadata: this._formBuilder.group({
-              species: shared.metadata.species == null ? null : shared.metadata.species[0],
-              cellType: shared.metadata.cellType == null ? null : shared.metadata.cellType[0],
-              brainRegion: shared.metadata.brainRegion == null ? null : shared.metadata.brainRegion[0],
-              tracingSystem: shared.metadata.tracingSystem == null ? null : shared.metadata.tracingSystem[0]
-            }),
-            reconstructions: this._formBuilder.group({
-              reconstructionsList: this._formBuilder.array(this.fillReconstructionsList(shared.id, shared.reconstructions))
-            })
-          }));
+
         } else {
           this.snackBar.open('Only articles evaluated "Positive Describing Reconstructions" can be linked,' +
             ' the article you are trying to link is not. ' +
-            'Please evaluated it correctly first', 'Error');
+            'Please review it', 'Error');
         }
       });
     }
