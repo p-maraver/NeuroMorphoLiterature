@@ -246,6 +246,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
         'data.evaluatedDate',
         'data.pmid',
         'data.title',
+        'authors',
         'metadata',
         'comment',
         'accept'
@@ -257,6 +258,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
         'data.evaluatedDate',
         'data.pmid',
         'data.title',
+        'authors',
         'metadata',
         'comment',
         'classifier.confidence',
@@ -514,7 +516,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   }
 
   fillData() {
-    if (this.view === 'emails') {
+    if (this.view === 'emails' || this.view === 'classifier') {
       this.articlePage.content.forEach(article => {
         article.data.bulkEmail = true;
         article.data.authorList.forEach(author => {
@@ -553,16 +555,18 @@ export class ArticleListComponent implements OnInit, OnDestroy {
                     count++;
                   }
                 });
-                const reconstructionData = article.reconstructions.reconstructionsList.filter(
-                  value => value.statusDetails === this.status);
+                if (article.reconstructions != null && article.reconstructions.reconstructionsList != null) {
+                  const reconstructionData = article.reconstructions.reconstructionsList.filter(
+                    value => value.statusDetails === this.status);
 
-                if (new Date(reconstructionData[0].expirationDate) <= new Date()) {
-                  toBeSend = true;
-                }
-                if (count > 1 || !toBeSend) {
-                  article.data.bulkEmail = false;
-                }
-              });
+                  if (new Date(reconstructionData[0].expirationDate) <= new Date()) {
+                    toBeSend = true;
+                  }
+                  if (count > 1 || !toBeSend) {
+                    article.data.bulkEmail = false;
+                  }
+                }});
+
           }
         });
       });
