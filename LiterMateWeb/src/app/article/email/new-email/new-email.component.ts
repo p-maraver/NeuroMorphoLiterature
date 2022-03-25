@@ -48,8 +48,8 @@ export class NewEmailComponent implements OnInit {
   removable = true;
   addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
-  emailTypes: String[] = ['neurons', 'glia'];
-  emailType = 'neurons';
+  emailTypes: String[] = ['neuronal', 'glia'];
+  emailType = 'neuronal';
   available = false;
 
   editorConfig: AngularEditorConfig = {
@@ -110,7 +110,7 @@ export class NewEmailComponent implements OnInit {
 
   extractType(): void {
     const cellType = this.article.metadata.cellType != null ?
-      this.article.metadata.cellType.toString().toLowerCase() : 'neurons';
+      this.article.metadata.cellType.toString().toLowerCase() : 'neuron';
     if (cellType.indexOf('glia') !== -1 || cellType.indexOf('rocyte') !== -1) {
       this.emailType = 'glia';
     }
