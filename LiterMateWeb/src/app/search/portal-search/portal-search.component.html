@@ -62,9 +62,14 @@
   </ng-container>
 
   <!-- Symbol Column -->
-  <ng-container matColumnDef="success">
-    <th mat-header-cell *matHeaderCellDef> Executed on </th>
-    <td mat-cell *matCellDef="let element"> {{element.log.start | date: 'yyyy-MM-dd'}} </td>
+  <ng-container matColumnDef="start">
+    <th mat-header-cell *matHeaderCellDef> Started on </th>
+    <td mat-cell *matCellDef="let element"> {{element.log.start ? (element.log.start| date: 'yyyy-MM-dd h:mm'): '' }} </td>
+    <td mat-cell *matCellDef="let element"> {{element.log.start ? (element.log.start| date: 'yyyy-MM-dd'): '' }} </td>
+  </ng-container>
+  <ng-container matColumnDef="stop">
+    <th mat-header-cell *matHeaderCellDef> Finished on </th>
+    <td mat-cell *matCellDef="let element"> {{element.log.stop ? (element.log.stop | date: 'yyyy-MM-dd h:mm'): '' }} </td>
   </ng-container>
 
   <ng-container matColumnDef="edit">
