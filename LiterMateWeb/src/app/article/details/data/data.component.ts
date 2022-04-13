@@ -292,7 +292,7 @@ export class DataComponent implements OnInit, OnChanges {
         break;
       }
       case 'pubmedcentral': {
-        url = 'https://www.ncbi.nlm.nih.gov/pmc/' + this.dataFormGroup.get('pmcid').value;
+        url = 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC' + this.dataFormGroup.get('pmcid').value;
         break;
       }
       case 'doi': {
