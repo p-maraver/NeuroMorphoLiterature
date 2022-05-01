@@ -18,7 +18,7 @@
 
 <nav *ngIf="showHeather()">
   <button mat-button [routerLink]="['dashboard']"><mat-icon [inline]="true" aria-hidden="false">home</mat-icon></button>
-  <button mat-button><a href="http://129.174.10.65:8080/NMOLiteratureWeb/index.html"><mat-icon [inline]="true" aria-hidden="false">widgets</mat-icon></a></button>
+  <button mat-button [routerLink]="['dashboard2']"><mat-icon [inline]="true" aria-hidden="false">widgets</mat-icon></button>
 
   <button mat-button [matMenuTriggerFor]="menu1">Evaluate</button>
   <mat-menu #menu1="matMenu">
@@ -75,8 +75,6 @@
   <button mat-button [routerLink]="['agenda']">Agenda</button>
 
   <button mat-button><a href="http://129.174.10.65:8080/NMOLiteratureWeb/release/releaseMenu.html#/release">Release</a></button>
-
-  <!--<a routerLink="/dashboard">Dashboard</a>-->
 </nav>
 <router-outlet></router-outlet>
 

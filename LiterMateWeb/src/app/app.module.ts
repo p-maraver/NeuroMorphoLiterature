@@ -98,6 +98,7 @@ import {ClassifierComponent} from './classifier/classifier.component';
 import {ChartsModule, ThemeService} from 'ng2-charts';
 import { KeywordsComponent } from './classifier/keywords/keywords.component';
 import { TrainComponent } from './classifier/train/train.component';
+import { Dashboard2Component } from './dashboard2/dashboard2.component';
 
 @NgModule({
   declarations: [
@@ -140,7 +141,8 @@ import { TrainComponent } from './classifier/train/train.component';
     BulkStatusComponent,
     ClassifierComponent,
     KeywordsComponent,
-    TrainComponent
+    TrainComponent,
+    Dashboard2Component
   ],
   imports: [
     AngularEditorModule,

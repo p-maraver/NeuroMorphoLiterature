@@ -1,0 +1,131 @@
+<div class="container">
+  <div class="search slide-wrapper">
+    <a class="slide" id="portal" routerLink="/search/portals" style="text-decoration: none">
+      <div class="portal_search">
+        <p class='box-text'>Portal Search</p>
+      </div>
+    </a>
+  </div>
+  <div class="keywords slide-wrapper">
+    <a class="slide" id="keywords" routerLink="/search/keywords" style="text-decoration: none">
+      <div class="portal_search">
+        <p class='box-text'>KeyWords</p>
+      </div>
+    </a>
+  </div>
+  <div class="articles slide-wrapper">
+    <a class="slide" id="evaluate" routerLink="/articles/ToBeEvaluated" style="text-decoration: none">
+      <div class="evaluate_articles">
+        <p class='box-text'>Evaluate/Pre-evaluate Articles
+          <span class="badge">{{articleNumbers['Pending evaluation']}}</span></p>
+        <p class='box-text'> Pre-Evaluated Articles
+          <span class="badge">{{articleNumbers['Evaluated']}}</span></p>
+      </div>
+    </a>
+  </div>
+
+  <div class="evaluated-container">
+    <div class="slide-wrapper">
+      <a class="slide" id="inaccessible" routerLink="/articles/Inaccessible"
+         style="text-decoration: none">
+        <div class="inaccessible_articles">
+        <span class='box-text'>Inaccessible Articles
+          </span>
+          <span class="badge">{{articleNumbers['Inaccessible']}}</span>
+        </div>
+      </a>
+    </div>
+    <div class="slide-wrapper">
+      <a class="slide" id="negative" routerLink="/articles/Negative" style="text-decoration: none">
+        <div class="negative_articles text-wrapper">
+        <span class='box-text'>Negative Articles
+          </span>
+          <span class="badge">{{articleNumbers['Negative']}}</span>
+        </div>
+      </a>
+    </div>
+    <div class="slide-wrapper">
+      <a class="slide" id="positive" routerLink="/articles/Positive" style="text-decoration: none">
+        <div class="positive_articles">
+          <p class='box-text'>Positive Articles
+            <span class="badge">{{articleNumbers['Positive']}}[{{total_reconstructions}}]</span></p>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div class="release slide-wrapper">
+    <a class="slide" id="release" style="text-decoration: none"
+       href="http://129.174.10.65:8080/NMOLiteratureWeb/release/releaseMenu.html#/release" target="_blank">
+      <div class="release">
+        <p class='box-text'>Release</p>
+      </div>
+    </a>
+  </div>
+  <div class="email slide-wrapper">
+    <a class="slide" id="invitation" style="text-decoration: none" routerLink="/articles/Positive"
+       [queryParams]="{'reconstructions.currentStatusList.specificDetails': 'To be requested', view: 'emails'}">
+      <div class="email">
+        <p class='box-text'>Send Invitation Email
+          <span class="badge">{{getReconstructionsByFilter('To be requested')}}</span>
+        </p>
+      </div>
+    </a>
+  </div>
+  <div class="email slide-wrapper">
+    <a class="slide" id="reminder" style="text-decoration: none" routerLink="/articles/Positive"
+       [queryParams]="{'reconstructions.currentStatusList.specificDetails': 'Invited', view: 'emails'}">
+      <div class="email">
+        <p class='box-text'>Send Reminder Email
+          <span class="badge">{{getReconstructionsExpiredByFilter('Invited')}}
+            /{{getReconstructionsByFilter('Invited')}}</span>
+        </p>
+      </div>
+    </a>
+  </div>
+  <div class="email slide-wrapper">
+    <a class="slide" id="pestering" style="text-decoration: none" routerLink="/articles/Positive"
+       [queryParams]="{'reconstructions.currentStatusList.specificDetails': 'Reminder', view: 'emails'}">
+      <div class="email">
+        <p class='box-text'>Send Pestering Email
+          <span class="badge">{{getReconstructionsExpiredByFilter('Reminder')}}
+            /{{getReconstructionsByFilter('Reminder')}}</span>
+        </p>
+      </div>
+    </a>
+  </div>
+  <div class="email slide-wrapper">
+    <a class="slide" id="ultimatum" style="text-decoration: none" routerLink="/articles/Positive"
+       [queryParams]="{'reconstructions.currentStatusList.specificDetails': 'Pestering', view: 'emails'}">
+      <div class="email">
+        <p class='box-text'>Send Ultimatum Email
+          <span class="badge">{{getReconstructionsExpiredByFilter('Pestering')}}
+            /{{getReconstructionsByFilter('Pestering')}}</span>
+        </p>
+      </div>
+    </a>
+  </div>
+
+  <div class="waiting slide-wrapper">
+    <a class="slide" id="waiting" style="text-decoration: none" routerLink="/articles/Positive"
+       [queryParams]="{'reconstructions.currentStatusList.specificDetails': 'Ultimatum', view: 'emails'}">
+      <div class="evaluate_articles">
+        <p class='box-text'> Waiting for response
+          <span class="badge">{{getReconstructionsByFilter('Ultimatum')}}</span>
+        </p>
+      </div>
+    </a>
+  </div>
+  <div class="warn slide-wrapper">
+    <a class="slide" id="warn" style="text-decoration: none" routerLink="/articles/Positive"
+       [queryParams]="{'reconstructions.currentStatusList.specificDetails': 'Positive response', view: 'emails'}">
+      <div class="evaluate_articles">
+
+        <p class='box-text'> Send Positive Response Warning
+          <span class="badge">{{getReconstructionsExpiredByFilter('Positive response')}}
+            /{{getReconstructionsByFilter('Positive response')}}</span>
+        </p>
+      </div>
+    </a>
+  </div>
+
+</div>

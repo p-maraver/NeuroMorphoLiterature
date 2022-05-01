@@ -1,0 +1,167 @@
+span {
+  white-space: nowrap;
+}
+p {
+  padding: 3px;
+}
+.container {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  font-family: 'Gill Sans';
+
+
+}
+.search {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
+.keywords {
+  grid-column-start: 3;
+  grid-column-end: 5;
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
+.articles {
+  grid-column-start: 1;
+  grid-column-end: 5;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+.evaluated-container {
+  grid-column-start: 1;
+  grid-column-end: 5;
+  grid-row-start: 3;
+  grid-row-end: 4;
+
+  /* This is a grid */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+}
+.release {
+  grid-column-start: 5;
+  grid-column-end: 9;
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
+.invitation {
+  grid-column-start: 5;
+  grid-column-end: 6;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+.reminder {
+  grid-column-start: 6;
+  grid-column-end: 7;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+.pestering {
+  grid-column-start: 7;
+  grid-column-end: 8;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+.ultimatum {
+  grid-column-start: 8;
+  grid-column-end: 9;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+.waiting {
+  grid-column-start: 5;
+  grid-column-end: 7;
+  grid-row-start: 3;
+  grid-row-end: 4;
+}
+
+.warn {
+  grid-column-start: 7;
+  grid-column-end: 9;
+  grid-row-start: 3;
+  grid-row-end: 4;
+}
+.slide-wrapper {
+  position: relative;
+  margin: 4px;
+}
+
+.slide {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  height: 100%;
+  width: 100%;
+}
+#portal {
+  background-color: #b46464;
+}
+#keywords {
+  background-color: #7a4545;
+}
+#inaccessible {
+  background-color: #2D4471;
+}
+#negative {
+  background-color: #152b55;
+}
+#positive {
+  background-color: #061739;
+}
+#evaluate {
+  background-color: #4E648E;
+}
+#release {
+  background-color: orange;
+}
+#invitation {
+  background-color: #BDD09F;
+}
+#reminder {
+  background-color: #92a17a;
+}
+#pestering {
+  background-color: #59624b;
+}
+#ultimatum {
+  background-color: #353a2d;
+}
+
+#waiting {
+  background-color: #5d6c45;
+}
+
+#warn {
+  background-color: #537027;
+}
+
+.text-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 8px;
+}
+.box-text {
+  color: white;
+  font-style: normal;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 16px;
+}
+.badge {
+  background-color: white;
+  color: #595858;
+  font-size: 12px;
+  padding: 2px 4px;
+  border-radius: 8px;
+  margin: 4px;
+}

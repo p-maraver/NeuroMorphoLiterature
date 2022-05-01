@@ -38,6 +38,7 @@ import {ConfigurationComponent} from './agenda/configuration/configuration.compo
 import {ClassifierComponent} from './classifier/classifier.component';
 import {TrainComponent} from './classifier/train/train.component';
 import {KeywordsComponent} from './classifier/keywords/keywords.component';
+import {Dashboard2Component} from './dashboard2/dashboard2.component';
 
 
 const routes: Routes = [
@@ -69,6 +70,7 @@ const routes: Routes = [
   },
   {path: 'articles/:collection', component: ArticleListComponent},
   {path: 'dashboard', component: DashboardComponent},
+  {path: 'dashboard2', component: Dashboard2Component},
   {path: 'classifier', component: ClassifierComponent,
     children: [
       {path: '', redirectTo: 'train', pathMatch: 'full'},
