@@ -31,7 +31,7 @@ import {PortalDialogComponent} from './portal-dialog.component';
 export class PortalSearchComponent implements OnInit {
 
   displayedColumns: string[] = ['name', 'startYear', 'endYear',
-    'token', 'active', 'start', 'status', 'edit'];
+    'token', 'active', 'start', 'stop', 'status', 'edit'];
   portalList = [];
   searching = false;
 

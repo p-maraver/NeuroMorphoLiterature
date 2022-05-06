@@ -31,7 +31,7 @@ export class FullTextService {
   }
 
   findFullText(id: string): Observable<FullText> {
-    return this.http.get<FullText>(`${this.url}/${id}`);
+    return this.http.get<FullText>(`${this.url}/${id}?images=false`);
   }
 
   saveFullText(id: string, rawText: string | ArrayBuffer): Observable<any> {

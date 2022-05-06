@@ -92,6 +92,14 @@ export class EmailService {
     return this.http.get<ContactPage>(`${this.url}/contacts?pageIndex=${pageIndex}&pageSize=${pageSize}${textUrl}`);
   }
 
+  async findContactListAsync(pageIndex: number, pageSize: number, text: string): Promise<ContactPage> {
+    let textUrl = '';
+    if (text !== null) {
+      textUrl = `&text=${text}`;
+    }
+    return await this.http.get<ContactPage>(`${this.url}/contacts?pageIndex=${pageIndex}&pageSize=${pageSize}${textUrl}`).toPromise();
+  }
+
   async findContact(id: string): Promise<Contact> {
     return await this.http.get<Contact>(`${this.url}/contacts/${id}`).toPromise();
   }
