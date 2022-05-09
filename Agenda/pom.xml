@@ -27,6 +27,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Agenda</artifactId>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.azure</groupId>
+                <artifactId>azure-sdk-bom</artifactId>
+                <version>1.2.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -37,11 +48,21 @@
             <artifactId>google-api-client</artifactId>
             <version>1.29.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.microsoft.graph</groupId>
+            <artifactId>microsoft-graph</artifactId>
+            <version>5.23.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-identity</artifactId>
+        </dependency>
     </dependencies>
     <properties>
         <maven.compiler.source>10</maven.compiler.source>
         <maven.compiler.target>10</maven.compiler.target>
     </properties>
+
 
     <build>
         <plugins>
