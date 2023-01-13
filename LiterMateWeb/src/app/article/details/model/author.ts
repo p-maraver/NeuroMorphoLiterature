@@ -19,6 +19,9 @@ import {Contact} from '../../../agenda/model/contact';
 
 
 export class Author {
+  firstName: string;
+  lastName: string;
+  email: string;
   name: string;
   statuses: string[];
   contactId: string;

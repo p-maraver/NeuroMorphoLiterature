@@ -21,6 +21,7 @@ import {HttpClient} from '@angular/common/http';
 import {Article} from '../model/article';
 import {ArticlePage} from '../model/article-page';
 import {Contact} from '../../../agenda/model/contact';
+import {environment} from '../../../../environments/environment';
 
 
 @Injectable({
@@ -28,8 +29,7 @@ import {Contact} from '../../../agenda/model/contact';
 })
 export class ArticlesService {
 
-  // private url = 'http://localhost:8188';
-  private url = 'http://129.174.10.65:8189/articles';
+  private url = environment.apiUrl + '/articles';
 
   constructor(private http: HttpClient) {
   }

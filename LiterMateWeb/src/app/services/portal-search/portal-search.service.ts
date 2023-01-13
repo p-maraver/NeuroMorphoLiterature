@@ -21,6 +21,7 @@ import {Observable} from 'rxjs';
 import {Portal} from './model/portal';
 import {KeywordPage} from './model/keyword-page';
 import {Keyword} from './model/keyword';
+import {environment} from '../../../environments/environment';
 
 
 @Injectable({
@@ -28,8 +29,7 @@ import {Keyword} from './model/keyword';
 })
 export class PortalSearchService {
 
-   private url = 'http://129.174.10.65:8189/search';
-   // private url = 'http://localhost:8187';
+  private url = environment.apiUrl + '/search';
 
   constructor(private http: HttpClient) {
   }

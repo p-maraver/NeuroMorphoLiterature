@@ -18,13 +18,13 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PdfService {
-  private url = 'http://129.174.10.65:8186';
-  // private url = 'http://localhost:8186';
+  private url = environment.apiUrl + '/pdf';
 
   constructor(private http: HttpClient) {
   }

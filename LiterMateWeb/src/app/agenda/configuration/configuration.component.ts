@@ -27,19 +27,31 @@ import {MatSnackBar} from '@angular/material';
 })
 export class ConfigurationComponent implements OnInit {
   hide = true;
-  config: Config;
+  code: string;
 
   constructor(private emailService: EmailService,
               private snackBar: MatSnackBar) { }
 
   async ngOnInit() {
-    this.config = await this.emailService.findConfig();
+    // this.config = await this.emailService.findConfig();
   }
 
   async update() {
-    await this.emailService.updateConfig(this.config);
+    await this.emailService.updateCode(this.code);
     this.snackBar.open('Configuration updated correctly', 'Success',
       {panelClass: 'success-dialog'});
+  }
+
+  authorizeEmailAccess() {
+    // doc: https://learn.microsoft.com/en-us/graph/auth-v2-user
+    const url = 'https://login.microsoftonline.com/1516d7e7-7c6d-4e95-9a23-e22c61b6b283/oauth2/v2.0/authorize?' +
+      'client_id=a79ac578-4709-4ee4-9d07-99c361ace7d5' +
+      '&response_type=code' +
+      '&redirect_uri=https://neuromorpho.org/litermate' +
+      '&response_mode=query' +
+      '&scope=offline_access%20mail.read%20mail.send' +
+      '&state=12345';
+    window.open(url);
   }
 
 }

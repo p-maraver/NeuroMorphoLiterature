@@ -15,19 +15,18 @@
  *
  */
 
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Classifier} from './classifier';
 import {Observable} from 'rxjs';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClassifierService {
 
-   private url = 'http://129.174.10.65:8189/evaluate';
-
-   // private url = 'http://localhost:8184';
+  private url = environment.apiUrl + '/evaluate';
 
   constructor(private http: HttpClient) {
   }

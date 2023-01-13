@@ -16,19 +16,18 @@
   -->
 
 <div class="example-container">
-  <mat-form-field appearance="fill">
-    <mat-label>Enter your email</mat-label>
-    <input matInput [ngModel]="config?.username" (ngModelChange)="config.username = $event">
-  </mat-form-field>
+  <p> You will be redirected to microsoft 365 to authorize the access of this app to your email. </p>
+  <p> It will send emails on your behalf and have access to read your received emails</p>
+  <p>
+    <button id="authorize" mat-raised-button (click)="authorizeEmailAccess()">Authorize email access</button>
+  </p>
 </div>
 <div class="example-container">
   <mat-form-field appearance="fill">
-    <mat-label>Enter your password</mat-label>
-    <input matInput [type]="hide ? 'password' : 'text'" [ngModel]="config?.password" (ngModelChange)="config.password = $event">
-    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-    </button>
+    <mat-label>Enter the code from the redirect URL until the redirect is fixed</mat-label>
+    <textarea matInput [ngModel]="code" (ngModelChange)="code = $event"></textarea>
   </mat-form-field>
+  <button id="update" mat-raised-button (click)="update()">Update</button>
+
 </div>
 
-<button id="update" mat-raised-button (click)="update()">Update</button>

@@ -19,13 +19,14 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ReleaseVersion} from './release-version';
+import {environment} from '../../../environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReleaseService {
-  private url = 'http://129.174.10.65:8189/release';
+  private url = environment.apiUrl + '/release';
 
   constructor(private http: HttpClient) {
   }

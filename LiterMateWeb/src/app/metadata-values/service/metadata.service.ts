@@ -20,17 +20,14 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {MetadataPage} from '../model/metadata-page';
 import {MetadataValue} from '../model/metadata-value';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MetadataService {
-   private url_metadata = 'http://129.174.10.65:8189/metadata';
-   private url_articles = 'http://129.174.10.65:8189/articles';
-
-  // private url_articles = 'http://localhost:8188';
-  // private url_metadata = 'http://localhost:8180';
-
+   private url_metadata = environment.apiUrl + 'metadata';
+   private url_articles = environment.apiUrl + '/articles';
 
   constructor(private http: HttpClient) {
   }

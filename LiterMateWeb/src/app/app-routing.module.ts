@@ -85,7 +85,8 @@ const routes: Routes = [
       {path: 'configuration', component: ConfigurationComponent},
       {path: 'contacts', component: ContactListComponent},
       {path: 'contacts/:id', component: ContactComponent},
-      {path: 'templates', component: TemplatesComponent}
+      {path: 'templates', component: TemplatesComponent},
+      {path: 'litermate', component: ConfigurationComponent},
     ]
   },
   {path: 'metadata', component: MetadataValuesComponent},

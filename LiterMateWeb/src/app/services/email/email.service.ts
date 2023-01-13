@@ -22,24 +22,17 @@ import {Email} from './email';
 import {Article} from '../../article/details/model/article';
 import {ContactPage} from '../../agenda/model/contact-page';
 import {Contact} from '../../agenda/model/contact';
-import {Config} from '../../agenda/model/config';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmailService {
-  private url = 'http://129.174.10.65:8189/emails';
-  private urlArticles = 'http://129.174.10.65:8189/articles';
 
-  // private url = 'http://localhost:8183';
-  // private urlArticles = 'http://localhost:8188';
+  // private url = environment.apiUrl + '/emails';
+  private url = 'http://localhost:8183';
 
   constructor(private http: HttpClient) {
-  }
-
-  findByArticleId(id: string): Observable<Email[]> {
-    return this.http.get<Email[]>(`${this.url}/${id}`);
   }
 
   generateEmail(id: string, article: Article, type: string, ancient: boolean, available: boolean): Observable<Email> {
@@ -120,20 +113,13 @@ export class EmailService {
   //   return this.http.put<any>(`${this.urlArticles}/authors`, contact);
   // }
 
-  reloadContacts(): Observable<any> {
-    return this.http.put<any>(`${this.url}/contacts/`, null);
-  }
-
   exportContacts(): Observable<any> {
     return this.http.put<any>(`${this.url}/contacts/export`, null);
   }
 
-  async findConfig(): Promise<Config> {
-    return await this.http.get<Config>(`${this.url}/config`).toPromise();
-  }
 
-  async updateConfig(config: Config): Promise<any> {
-    return await this.http.put<any>(`${this.url}/config`, config).toPromise();
+  async updateCode(code: string): Promise<any> {
+    return await this.http.put<any>(`${this.url}/config?code=${code}`, null).toPromise();
   }
 
 
