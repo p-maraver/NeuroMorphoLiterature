@@ -1,9 +1,27 @@
+/*
+ * Copyright (c) 2015-2022, Patricia Maraver
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 import {Injectable} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {Article} from '../model/article';
 import {ArticlePage} from '../model/article-page';
 import {Contact} from '../../../agenda/model/contact';
+import {environment} from '../../../../environments/environment';
 
 
 @Injectable({
@@ -11,8 +29,7 @@ import {Contact} from '../../../agenda/model/contact';
 })
 export class ArticlesService {
 
-  // private url = 'http://localhost:8188';
-  private url = 'http://129.174.10.65:8189/articles';
+  private url = environment.apiUrl + '/articles';
 
   constructor(private http: HttpClient) {
   }

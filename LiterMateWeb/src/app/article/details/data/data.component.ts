@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2015-2022, Patricia Maraver
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 import {Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 
@@ -22,6 +39,8 @@ import {EmailService} from '../../../services/email/email.service';
 import {FullTextService} from '../../../services/full-text/full-text.service';
 import {PdfService} from '../../../services/pdf/pdf.service';
 import {fullNameEmail} from '../validators/fullname-email.validator';
+import {PubmedService} from '../../../services/pubmed/pubmed.service';
+import {environment} from '../../../../environments/environment';
 
 
 @Component({
@@ -59,6 +78,7 @@ export class DataComponent implements OnInit, OnChanges {
   constructor(private searchService: SearchService,
               private articlesService: ArticlesService,
               private dataService: DataService,
+              private pubmedService: PubmedService,
               private fullTextService: FullTextService,
               private pdfService: PdfService,
               private agendaService: EmailService,
@@ -275,7 +295,7 @@ export class DataComponent implements OnInit, OnChanges {
         break;
       }
       case 'pubmedcentral': {
-        url = 'https://www.ncbi.nlm.nih.gov/pmc/' + this.dataFormGroup.get('pmcid').value;
+        url = 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC' + this.dataFormGroup.get('pmcid').value;
         break;
       }
       case 'doi': {
@@ -300,7 +320,7 @@ export class DataComponent implements OnInit, OnChanges {
     if (db === 'pmc') {
       pmid = this.dataFormGroup.get('pmcid').value;
     }
-    this.searchService.findByPMID(pmid, db)
+    this.pubmedService.findByPMID(pmid, db)
       .subscribe(articleData => {
 
         this.dataFormGroup.markAsDirty();
@@ -310,10 +330,19 @@ export class DataComponent implements OnInit, OnChanges {
         } else {
           if (articleData.authorList.length === this.article.data.authorList.length) {
             for (let i = 0; i < articleData.authorList.length; i++) {
-              this.article.data.authorList[i].name = articleData.authorList[i].name;
+              this.article.data.authorList[i].name = articleData.authorList[i].firstName +
+                ' ' + articleData.authorList[i].lastName;
+              this.article.data.authorList[i].emailList = [];
+              this.article.data.authorList[i].emailList.push(articleData.authorList[i].email);
             }
           } else {
             this.article.data.authorList = articleData.authorList;
+            for (let i = 0; i < articleData.authorList.length; i++) {
+              this.article.data.authorList[i].name = articleData.authorList[i].firstName +
+                ' ' + articleData.authorList[i].lastName;
+              this.article.data.authorList[i].emailList = [];
+              this.article.data.authorList[i].emailList.push(articleData.authorList[i].email);
+            }
           }
           this.article.data.title = articleData.title;
           this.article.data.pmid = articleData.pmid;
@@ -422,7 +451,7 @@ export class DataComponent implements OnInit, OnChanges {
         error => {
           const values = error.error.errorMessage.split(';');
           const id = values[1].split('id: ')[1];
-          const link = `http://129.174.10.65:8198/article/${id}/details`;
+          const link = environment.apiUrl + `/article/${id}/details`;
           this.snackBar.open('Error saving new article - Duplicate resourced found in ' + error.error.errorMessage, 'View Article')
             .onAction()
             .subscribe(() =>

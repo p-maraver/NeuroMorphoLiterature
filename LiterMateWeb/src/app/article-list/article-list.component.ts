@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2015-2022, Patricia Maraver
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {ArticlesService} from '../article/details/services/articles.service';
@@ -137,12 +154,20 @@ export class ArticleListComponent implements OnInit, OnDestroy {
 
   }
 
-  getArticleList(): void {
+  async getArticleList(): Promise<void> {
     let searchText = 'page=' + this.page +
       '&sortDirection=' + this.sortDirection +
       '&sortProperty=' + this.sortProperty;
     if (this.text != null && this.text !== '') {
-      searchText = searchText + '&text=' + this.text;
+      if (this.text.includes('@')) {
+        // Search for the name on contacts
+        const contactList = await this.emailService.findContactListAsync(0, 10, this.text);
+        if (contactList.content.length > 0) {
+          searchText = searchText + '&data.authorList.contactId=' + contactList.content[0].id;
+        }
+      } else {
+        searchText = searchText + '&text=' + this.text;
+      }
     }
     const collection = Collection[this.route.snapshot.paramMap.get('collection')];
 
@@ -221,6 +246,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
         'data.evaluatedDate',
         'data.pmid',
         'data.title',
+        'authors',
         'metadata',
         'comment',
         'accept'
@@ -232,6 +258,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
         'data.evaluatedDate',
         'data.pmid',
         'data.title',
+        'authors',
         'metadata',
         'comment',
         'classifier.confidence',
@@ -489,7 +516,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   }
 
   fillData() {
-    if (this.view === 'emails') {
+    if (this.view === 'emails' || this.view === 'classifier') {
       this.articlePage.content.forEach(article => {
         article.data.bulkEmail = true;
         article.data.authorList.forEach(author => {
@@ -528,16 +555,18 @@ export class ArticleListComponent implements OnInit, OnDestroy {
                     count++;
                   }
                 });
-                const reconstructionData = article.reconstructions.reconstructionsList.filter(
-                  value => value.statusDetails === this.status);
+                if (article.reconstructions != null && article.reconstructions.reconstructionsList != null) {
+                  const reconstructionData = article.reconstructions.reconstructionsList.filter(
+                    value => value.statusDetails === this.status);
 
-                if (new Date(reconstructionData[0].expirationDate) <= new Date()) {
-                  toBeSend = true;
-                }
-                if (count > 1 || !toBeSend) {
-                  article.data.bulkEmail = false;
-                }
-              });
+                  if (new Date(reconstructionData[0].expirationDate) <= new Date()) {
+                    toBeSend = true;
+                  }
+                  if (count > 1 || !toBeSend) {
+                    article.data.bulkEmail = false;
+                  }
+                }});
+
           }
         });
       });

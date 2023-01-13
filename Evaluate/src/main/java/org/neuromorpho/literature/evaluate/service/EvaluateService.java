@@ -142,7 +142,7 @@ public class EvaluateService {
                         metadata.put("articleStatus", "Negative");
                         articleCommunication.updateArticle(article.getId(), "metadata", metadata);
                         articleCommunication.updateCollection(article.getId(), "Negative");
-                    } if (classifierEvaluation.isPositiveHighConfidence()
+                    } else if (classifierEvaluation.isPositiveHighConfidence()
                     && article.hasCompleteData()) {
                         Map<String, Object> metadata = classifierEvaluation.getMetadata();
                         metadata.put("comment", "Positive article with high confidence");

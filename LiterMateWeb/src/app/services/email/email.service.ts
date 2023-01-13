@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2015-2022, Patricia Maraver
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
@@ -5,24 +22,17 @@ import {Email} from './email';
 import {Article} from '../../article/details/model/article';
 import {ContactPage} from '../../agenda/model/contact-page';
 import {Contact} from '../../agenda/model/contact';
-import {Config} from '../../agenda/model/config';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmailService {
-  private url = 'http://129.174.10.65:8189/emails';
-  private urlArticles = 'http://129.174.10.65:8189/articles';
 
-  // private url = 'http://localhost:8183';
-  // private urlArticles = 'http://localhost:8188';
+  // private url = environment.apiUrl + '/emails';
+  private url = 'http://localhost:8183';
 
   constructor(private http: HttpClient) {
-  }
-
-  findByArticleId(id: string): Observable<Email[]> {
-    return this.http.get<Email[]>(`${this.url}/${id}`);
   }
 
   generateEmail(id: string, article: Article, type: string, ancient: boolean, available: boolean): Observable<Email> {
@@ -75,6 +85,14 @@ export class EmailService {
     return this.http.get<ContactPage>(`${this.url}/contacts?pageIndex=${pageIndex}&pageSize=${pageSize}${textUrl}`);
   }
 
+  async findContactListAsync(pageIndex: number, pageSize: number, text: string): Promise<ContactPage> {
+    let textUrl = '';
+    if (text !== null) {
+      textUrl = `&text=${text}`;
+    }
+    return await this.http.get<ContactPage>(`${this.url}/contacts?pageIndex=${pageIndex}&pageSize=${pageSize}${textUrl}`).toPromise();
+  }
+
   async findContact(id: string): Promise<Contact> {
     return await this.http.get<Contact>(`${this.url}/contacts/${id}`).toPromise();
   }
@@ -95,20 +113,13 @@ export class EmailService {
   //   return this.http.put<any>(`${this.urlArticles}/authors`, contact);
   // }
 
-  reloadContacts(): Observable<any> {
-    return this.http.put<any>(`${this.url}/contacts/`, null);
-  }
-
   exportContacts(): Observable<any> {
     return this.http.put<any>(`${this.url}/contacts/export`, null);
   }
 
-  async findConfig(): Promise<Config> {
-    return await this.http.get<Config>(`${this.url}/config`).toPromise();
-  }
 
-  async updateConfig(config: Config): Promise<any> {
-    return await this.http.put<any>(`${this.url}/config`, config).toPromise();
+  async updateCode(code: string): Promise<any> {
+    return await this.http.put<any>(`${this.url}/config?code=${code}`, null).toPromise();
   }
 
 

@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2015-2022, Patricia Maraver
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 import {Component, ElementRef, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import {Article} from '../model/article';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
@@ -221,29 +238,30 @@ export class MetadataComponent implements OnInit, OnChanges {
         if (sharedList.value.some(e => e.id === shared.id)) {
           this.snackBar.open('The article you are trying to link is already linked', 'Error');
         }
+        sharedList.push(this._formBuilder.group({
+          id: shared.id,
+          data: this._formBuilder.group({
+            title: shared.data.title,
+            pmid: shared.data.pmid
+          }),
+          metadata: this._formBuilder.group({
+            species: shared.metadata.species == null ? null : shared.metadata.species[0],
+            cellType: shared.metadata.cellType == null ? null : shared.metadata.cellType[0],
+            brainRegion: shared.metadata.brainRegion == null ? null : shared.metadata.brainRegion[0],
+            tracingSystem: shared.metadata.tracingSystem == null ? null : shared.metadata.tracingSystem[0]
+          }),
+          reconstructions: this._formBuilder.group({
+            reconstructionsList: this._formBuilder.array(this.fillReconstructionsList(shared.id, shared.reconstructions))
+          })
+        }));
         if (shared.data.dataUsage.includes(Usage.Describing) &&
           (shared.status === Collection.Positive || shared.status === Collection.Evaluated)) {
           this.sharedFormGroup.markAsDirty();
-          sharedList.push(this._formBuilder.group({
-            id: shared.id,
-            data: this._formBuilder.group({
-              title: shared.data.title,
-              pmid: shared.data.pmid
-            }),
-            metadata: this._formBuilder.group({
-              species: shared.metadata.species == null ? null : shared.metadata.species[0],
-              cellType: shared.metadata.cellType == null ? null : shared.metadata.cellType[0],
-              brainRegion: shared.metadata.brainRegion == null ? null : shared.metadata.brainRegion[0],
-              tracingSystem: shared.metadata.tracingSystem == null ? null : shared.metadata.tracingSystem[0]
-            }),
-            reconstructions: this._formBuilder.group({
-              reconstructionsList: this._formBuilder.array(this.fillReconstructionsList(shared.id, shared.reconstructions))
-            })
-          }));
+
         } else {
           this.snackBar.open('Only articles evaluated "Positive Describing Reconstructions" can be linked,' +
             ' the article you are trying to link is not. ' +
-            'Please evaluated it correctly first', 'Error');
+            'Please review it', 'Error');
         }
       });
     }
