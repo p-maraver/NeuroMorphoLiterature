@@ -26,7 +26,7 @@ import {environment} from '../../../environments/environment';
   providedIn: 'root'
 })
 export class MetadataService {
-   private url_metadata = environment.apiUrl + 'metadata';
+   private url_metadata = environment.apiUrl + '/metadata';
    private url_articles = environment.apiUrl + '/articles';
 
   constructor(private http: HttpClient) {

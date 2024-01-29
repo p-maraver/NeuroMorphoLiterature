@@ -39,7 +39,6 @@ import {EmailService} from '../../../services/email/email.service';
 import {FullTextService} from '../../../services/full-text/full-text.service';
 import {PdfService} from '../../../services/pdf/pdf.service';
 import {fullNameEmail} from '../validators/fullname-email.validator';
-import {PubmedService} from '../../../services/pubmed/pubmed.service';
 import {environment} from '../../../../environments/environment';
 
 
@@ -78,7 +77,6 @@ export class DataComponent implements OnInit, OnChanges {
   constructor(private searchService: SearchService,
               private articlesService: ArticlesService,
               private dataService: DataService,
-              private pubmedService: PubmedService,
               private fullTextService: FullTextService,
               private pdfService: PdfService,
               private agendaService: EmailService,
@@ -320,7 +318,7 @@ export class DataComponent implements OnInit, OnChanges {
     if (db === 'pmc') {
       pmid = this.dataFormGroup.get('pmcid').value;
     }
-    this.pubmedService.findByPMID(pmid, db)
+    this.searchService.findByPMID(pmid, db)
       .subscribe(articleData => {
 
         this.dataFormGroup.markAsDirty();
@@ -330,19 +328,10 @@ export class DataComponent implements OnInit, OnChanges {
         } else {
           if (articleData.authorList.length === this.article.data.authorList.length) {
             for (let i = 0; i < articleData.authorList.length; i++) {
-              this.article.data.authorList[i].name = articleData.authorList[i].firstName +
-                ' ' + articleData.authorList[i].lastName;
-              this.article.data.authorList[i].emailList = [];
-              this.article.data.authorList[i].emailList.push(articleData.authorList[i].email);
+              this.article.data.authorList[i].name = articleData.authorList[i].name;
             }
           } else {
             this.article.data.authorList = articleData.authorList;
-            for (let i = 0; i < articleData.authorList.length; i++) {
-              this.article.data.authorList[i].name = articleData.authorList[i].firstName +
-                ' ' + articleData.authorList[i].lastName;
-              this.article.data.authorList[i].emailList = [];
-              this.article.data.authorList[i].emailList.push(articleData.authorList[i].email);
-            }
           }
           this.article.data.title = articleData.title;
           this.article.data.pmid = articleData.pmid;

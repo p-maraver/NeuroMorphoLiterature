@@ -33,7 +33,7 @@ export class SearchService {
     return this.http.get<ArticleData>(`${this.url}/crossref?doi=${doi}`);
   }
 
-  // findByPMID(pmid: string, db: string): Observable<ArticleData> {
-  //   return this.http.get<ArticleData>(`${this.url}/pubmed?pmid=${pmid}&db=${db}`);
-  // }
+  findByPMID(pmid: string, db: string): Observable<ArticleData> {
+    return this.http.get<ArticleData>(`${this.url}/pubmed?pmid=${pmid}&db=${db}`);
+  }
 }
