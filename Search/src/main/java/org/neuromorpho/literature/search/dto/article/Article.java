@@ -147,4 +147,13 @@ public class Article {
         }
 
     }
+    
+    public Boolean anyEmailAuthorList(){
+        for (Author author : authorList) {
+            if (author.getEmail() != null){
+                return true;
+            }
+        }
+        return false;
+    }
 }

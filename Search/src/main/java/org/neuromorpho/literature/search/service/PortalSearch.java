@@ -202,6 +202,9 @@ public abstract class PortalSearch implements IPortalSearch {
             if (this.article.getPmid() != null) {
                 this.article = pubMedService.retrievePubMedArticleData(this.article.getPmid(), Article.DB.PUBMED);
             }
+            if (this.article.getPmcid() != null && !this.article.anyEmailAuthorList()) {
+                this.article = pubMedService.retrievePubMedArticleData(this.article.getPmid(), Article.DB.PUBMEDCENTRAL);
+            }
             log.debug(this.article.toString());
             this.updateContactList();
             ArticleResponse response = literatureConnection.saveArticle(this.article, this.collection);
