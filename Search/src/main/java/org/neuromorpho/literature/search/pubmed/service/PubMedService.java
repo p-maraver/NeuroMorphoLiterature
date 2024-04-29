@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *  
+ *
  */
 
 package org.neuromorpho.literature.search.pubmed.service;
@@ -54,7 +54,7 @@ public class PubMedService {
     RestTemplate restTemplate = new RestTemplate();
     private ArticleAssembler assembler = new ArticleAssembler();
 
-    
+
     public Article retrievePubMedArticleData(String pmid, Article.DB db) {
 
         String url = uri
@@ -87,7 +87,7 @@ public class PubMedService {
             article.setPmcid(pmid);
             article.setPmid(record.getPmid());
         }
-        
+
         article.setJournal(this.getCorrectedName((String) articleValues.get("fulljournalname")));
         ArrayList<Map> articleIds = (ArrayList) articleValues.get("articleids");
         for (Map articleId : articleIds) {
@@ -97,11 +97,11 @@ public class PubMedService {
             }
         }
         String sortDateStr = (String) articleValues.get("epubdate");
-        if (sortDateStr.isEmpty()){
+        if (sortDateStr.isEmpty()) {
             sortDateStr = (String) articleValues.get("pubdate");
         }
         LocalDate publishedDate = assembler.tryParseDate(sortDateStr);
-        if (publishedDate == null){
+        if (publishedDate == null) {
             sortDateStr = ((String) articleValues.get("sortpubdate")).split(" ")[0];
         }
         publishedDate = assembler.tryParseDate(sortDateStr);
@@ -109,17 +109,17 @@ public class PubMedService {
 
         List<Author> authorList = new ArrayList();
 
+        url = uri
+                + "/efetch.fcgi?"
+                + "db=" + db.getDB()
+                + "&api_key=" + apiKey
+                + "&id=" + pmid
+                + "&retmode=xml";
+        log.debug("Accesing pubmed authors information & affiliation using url: " + url);
+
+        String xml = restTemplate.getForObject(url, String.class);
+        Document doc = Jsoup.parse(xml, "", Parser.xmlParser());
         if (db.equals(Article.DB.PUBMED)) {
-            url = uri
-                    + "/efetch.fcgi?"
-                    + "db=" + db.getDB()
-                    + "&api_key=" + apiKey
-                    + "&id=" + pmid
-                    + "&retmode=xml";
-            log.debug("Accesing pubmed authors information & affiliation using url: " + url);
-            
-            String xml = restTemplate.getForObject(url, String.class);
-            Document doc = Jsoup.parse(xml, "", Parser.xmlParser());
 
             for (Element a : doc.select("Author")) {
                 Element e = a.select("Affiliation").first();
@@ -142,24 +142,21 @@ public class PubMedService {
                     authorList.add(author);
                 }
             }
-        } else {
-            ArrayList<Map> authors = (ArrayList) articleValues.get("authors");
-            for (Map authorStr : authors) {
-                if (authorStr.get("authtype").equals("Author")) {
-                    String name = (String) authorStr.get("name");
-                    String finalName = name;
-                    if (name.contains(" ")) {
-                        String[] nameArray = name.split(" ");
-                        finalName = nameArray[1] + " " + nameArray[0];
-                    }
-                    Author author = new Author(finalName, null);
-
-                    authorList.add(author);
-                }
+        } else {    //PubMedCentral
+            for (Element authorElement : doc.select("contrib[contrib-type='author']")) {
+                Element fn = authorElement.select("given-names").first();
+                Element ln = authorElement.select("surname").first();
+                Element emailElement = authorElement.select("email").first();
+                String email = null;
+                if (emailElement != null) {
+                    email = emailElement.text();
+                } 
+                Author author = new Author(fn.text() + " " + ln.text(), email);
+                authorList.add(author);
             }
-
         }
         article.setAuthorList(authorList);
+
         return article;
     }
 
@@ -183,7 +180,7 @@ public class PubMedService {
 
 
     public Identifiers retrieveIdentifiersFromTitleDB(String title, String id, Article.DB db) {
-        if (id == null && title != null){
+        if (id == null && title != null) {
             String url = uri + "/esearch.fcgi?"
                     + "db=" + db.getDB()
                     + "&api_key=" + apiKey
@@ -197,7 +194,7 @@ public class PubMedService {
             Map result = (HashMap) pmidMap.get("esearchresult");
             ArrayList<String> uidList = (ArrayList) result.get("idlist");
 
-            if (uidList.size() == 1){
+            if (uidList.size() == 1) {
                 id = uidList.get(0);
             }
         }
@@ -238,5 +235,5 @@ public class PubMedService {
 //        }
 //        return null;
 //    }
-    
+
 }
