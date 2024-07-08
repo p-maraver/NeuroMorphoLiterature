@@ -6,15 +6,15 @@ import {Article} from '../../article/details/model/article';
 import {ContactPage} from '../../agenda/model/contact-page';
 import {Contact} from '../../agenda/model/contact';
 import {Config} from '../../agenda/model/config';
+import {environment} from '../../../environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmailService {
-  private url = 'http://129.174.10.65:8189/emails';
-  private urlArticles = 'http://129.174.10.65:8189/articles';
-
+  private url = environment.apiUrl + '/emails';
+  private urlArticles =  environment.apiUrl + '/articles';
   // private url = 'http://localhost:8183';
   // private urlArticles = 'http://localhost:8188';
 
