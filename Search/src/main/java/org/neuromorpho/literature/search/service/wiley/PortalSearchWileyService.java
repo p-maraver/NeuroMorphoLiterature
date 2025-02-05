@@ -171,6 +171,9 @@ public class PortalSearchWileyService extends PortalSearch {
                 throw new FullTextNotAvailableException("Link: " + uri + " portal: Wiley");
             }
             return null;
+        } catch (Exception ex) {
+            log.error("Error retrieving full text: " + ex.getMessage());
+            throw new FullTextNotAvailableException("Link: " + uri + " portal: Wiley");
         }
     }
 

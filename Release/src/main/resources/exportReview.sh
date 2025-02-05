@@ -64,18 +64,27 @@ db.article.positives.find({"sharedList": {$exists: true}, "reconstructions.globa
             }
         }); 
     }
-});'
-
-
-db.article.positives.find({"sharedList": {$exists: true}, "reconstructions.globalStatus": {$exists: false} , "data.dataUsage": "SHARING"}).forEach(function (a) {
-    print('Article: ' + a._id);
-    for (i = 0; i<a.sharedList.length; i++){
-        db.article.positives.find({"_id":  a.sharedList[i].sharedId}).forEach(function (sharedArticle) {
-            a.reconstructions = {};
-            if (sharedArticle.reconstructions != null){
-                a.reconstructions.globalStatus = sharedArticle.reconstructions.globalStatus;
-                db.article.positives.save(a);
-            }
-        }); 
-    }
 });
+
+db.article.positives.update(
+    {"reconstructions": {$exists: false}},
+    { $set: { "reconstructions.globalStatus": "UNKNOWN"}},
+    false,
+    true
+);
+db.article.positives.update(
+    {"reconstructions.globalStatus": {$exists: false}},
+    { $set: { "reconstructions.globalStatus": "UNKNOWN"}},
+    false,
+    true
+);
+db.article.positives.update(
+    {"reconstructions.globalStatus": null},
+    { $set: { "reconstructions.globalStatus": "UNKNOWN"}},
+    false,
+    true
+);
+
+
+
+'

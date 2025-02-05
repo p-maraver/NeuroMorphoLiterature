@@ -108,11 +108,13 @@ public class EvaluateService {
             log.debug("Downloading fulltext for article with id " + article.getId());
             ArticleContent articleContent = fullTextCommunication.getFullText(article);
 
-            if (!articleContent.hasText()) {
+            if (articleContent == null || !articleContent.hasText()) {
                 String text = this.extractPDFContent(article);
                 if (text != null && text.length() > 10) {
                     articleContent = new ArticleContent(text);
                     fullTextCommunication.saveRawText(article.getId(), articleContent);
+                } else{
+                    articleContent = new ArticleContent();
                 }
             }
             articleCommunication.updateArticle(article.getId(), "data.fulltext", articleContent.getContentType());

@@ -27,7 +27,7 @@ import {FullText} from '../../article/full-text/model/full-text';
 })
 export class ExternalService {
 
-  private url = 'http://cng-nmo-dev6.orc.gmu.edu/litermate-collect';
+  private url = 'https://nmo-meta.cec.gmu.edu/neuroner/litermate-collect';
 
   constructor(private http: HttpClient) {
   }

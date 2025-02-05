@@ -12,9 +12,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
+ *  
  */
 
-mat-form-field {
-  padding: 10px 10px;
+
+package org.neuromorpho.literature.agenda.exceptions;
+
+public class AuthenticationException extends RuntimeException {
+
+    public AuthenticationException(String text) {
+        super("User is not authenticated: " + text);
+    }
 }

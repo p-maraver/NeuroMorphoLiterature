@@ -99,6 +99,7 @@ import {ChartsModule, ThemeService} from 'ng2-charts';
 import { KeywordsComponent } from './classifier/keywords/keywords.component';
 import { TrainComponent } from './classifier/train/train.component';
 import { Dashboard2Component } from './dashboard2/dashboard2.component';
+import {DisableLinkDirective} from './release/disable-link.directive';
 
 @NgModule({
   declarations: [
@@ -142,7 +143,8 @@ import { Dashboard2Component } from './dashboard2/dashboard2.component';
     ClassifierComponent,
     KeywordsComponent,
     TrainComponent,
-    Dashboard2Component
+    Dashboard2Component,
+    DisableLinkDirective
   ],
   imports: [
     AngularEditorModule,

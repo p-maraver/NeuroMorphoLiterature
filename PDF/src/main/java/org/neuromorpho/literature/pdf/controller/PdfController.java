@@ -55,6 +55,7 @@ public class PdfController {
      *      \nJinsoo Hong1, Victor W. Pike1, and  ..."
      * }
      */
+    @CrossOrigin
     @RequestMapping(value = "file", method = RequestMethod.POST)
     public Map<String, String> extractPdfContentFromFile(@RequestParam("file") MultipartFile file) {
         Map<String, String> result = new HashMap<>();

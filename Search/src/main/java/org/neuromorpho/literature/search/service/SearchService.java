@@ -43,8 +43,7 @@ public class SearchService {
     private PortalRepository portalRepository;
     @Autowired
     private KeyWordRepository keyWordRepository;
-    @Autowired
-    private LiteratureConnection literatureConnection;
+
 
     public void launchSearch() throws Exception {
         List<Portal> portalList = portalRepository.findByActive(Boolean.TRUE);
@@ -52,29 +51,31 @@ public class SearchService {
             List<KeyWord> keyWordList = keyWordRepository.find("executedList." + portal.getName(), 0);
             //For each portal update executed keywords
             Log portalLog = new Log();
-            portalRepository.update(portal.getId(), "log", portalLog);
-
-            try {
-                IPortalSearch portalSearch = portalSearchFactory.launchPortalSearch(portal.getName());
-
-                for (KeyWord keyWord : keyWordList) {
-                    try {
-                        portalSearch.findArticleList(keyWord, portal);
-                        keyWordRepository.update(keyWord.getId(), "executedList." + portal.getName(), 1);
-                    } catch (Exception ex) {
-                        keyWordRepository.update(keyWord.getId(), "executedList." + portal.getName(), -1);
-                    }
-                }
-                portalLog.setCause("Finished");
-            } catch (InterruptedException ex) {
-                portalLog.setCause("Interrupted by user");
-            } catch (Exception ex) {
-                log.error("Unknown error", ex);
-                portalLog.setCause("HTTP Connection Error");
+            if (!keyWordList.isEmpty()) {
                 portalRepository.update(portal.getId(), "log", portalLog);
-                throw ex;
+
+
+                try {
+                    IPortalSearch portalSearch = portalSearchFactory.launchPortalSearch(portal.getName());
+
+                    for (KeyWord keyWord : keyWordList) {
+                        try {
+                            portalSearch.findArticleList(keyWord, portal);
+                            keyWordRepository.update(keyWord.getId(), "executedList." + portal.getName(), 1);
+                        } catch (Exception ex) {
+                            keyWordRepository.update(keyWord.getId(), "executedList." + portal.getName(), -1);
+                        }
+                    }
+                    portalLog.setCause("Finished");
+                } catch (InterruptedException ex) {
+                    portalLog.setCause("Interrupted by user");
+                } catch (Exception ex) {
+                    log.error("Unknown error", ex);
+                    portalLog.setCause("HTTP Connection Error");
+                    throw ex;
+                }
+                portalRepository.update(portal.getId(), "log", portalLog);
             }
-            portalRepository.update(portal.getId(), "log", portalLog);
 
         }
         for (Portal portal : portalList) {

@@ -73,8 +73,7 @@
     <button mat-menu-item [routerLink]="['search', 'keywords']">Keywords</button>
   </mat-menu>
   <button mat-button [routerLink]="['agenda']">Agenda</button>
-
-  <button mat-button><a href="http://129.174.10.65:8080/NMOLiteratureWeb/release/releaseMenu.html#/release">Release</a></button>
+  <button mat-button [routerLink]="['release']">Release</button>
 </nav>
 <router-outlet></router-outlet>
 

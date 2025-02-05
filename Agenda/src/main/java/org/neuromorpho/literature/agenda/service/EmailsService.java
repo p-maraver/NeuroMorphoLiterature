@@ -18,18 +18,18 @@
 package org.neuromorpho.literature.agenda.service;
 
 
-import org.neuromorpho.literature.agenda.communication.MetadataCommunication;
-import org.neuromorpho.literature.agenda.repository.EmailRepository;
-import org.neuromorpho.literature.agenda.repository.TemplateRepository;
-import org.neuromorpho.literature.agenda.repository.contacts.ContactRepository;
 import org.bson.types.ObjectId;
+import org.neuromorpho.literature.agenda.communication.Article;
 import org.neuromorpho.literature.agenda.communication.ArticleCommunication;
 import org.neuromorpho.literature.agenda.communication.Metadata;
-import org.neuromorpho.literature.agenda.communication.Article;
+import org.neuromorpho.literature.agenda.communication.MetadataCommunication;
 import org.neuromorpho.literature.agenda.model.Config;
 import org.neuromorpho.literature.agenda.model.Contact;
 import org.neuromorpho.literature.agenda.model.Email;
 import org.neuromorpho.literature.agenda.repository.ConfigRepository;
+import org.neuromorpho.literature.agenda.repository.EmailRepository;
+import org.neuromorpho.literature.agenda.repository.TemplateRepository;
+import org.neuromorpho.literature.agenda.repository.contacts.ContactRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,17 +41,11 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import javax.mail.search.ComparisonTerm;
-import javax.mail.search.ReceivedDateTerm;
-import javax.mail.search.SearchTerm;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -88,10 +82,11 @@ public class EmailsService {
 
     @Autowired
     private TemplateRepository templateRepository;
-
+    //    
+//    @Autowired
+//    private Azure azure;
     @Autowired
     private ConfigRepository configRepository;
-
 
     public Email generateEmail(Article article, String emailType, String type) {
         Email email = new Email();
@@ -179,6 +174,7 @@ public class EmailsService {
         log.debug("Sending email: " + email.toString());
         Properties props = new Properties();
         props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.port", portSend);
         props.put("mail.smtp.auth", true);
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", hostSend);
@@ -220,91 +216,97 @@ public class EmailsService {
 
     }
 
+    //    public void sendEmail(Email email) {
+//        azure.senEmail(email);
+//        email.setSentDate(LocalDate.now());
+//        emailRepository.save(email);
+//    }
+//    
     public void extractBouncedFrom(String folder) {
-        try {
-            Config config = configRepository.find();
-
-            //create properties field
-            Properties props = new Properties();
-            props.setProperty("mail.host", hostRead);
-            props.setProperty("mail.port", portRead);
-            props.setProperty("mail.transport.protocol", "imaps");
-
-            Session session = Session.getInstance(props,
-                    new javax.mail.Authenticator() {
-                        protected PasswordAuthentication getPasswordAuthentication() {
-                            return new PasswordAuthentication(config.getUsername(), config.getPassword());
-                        }
-                    });
-            Store store = session.getStore("imaps");
-            store.connect();
-            LocalDate date = LocalDate.of(2020, 1, 1);
-
-            SearchTerm newerThan = new ReceivedDateTerm(ComparisonTerm.GT,
-                    Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-            Folder inbox = store.getFolder(folder);
-            //create the folder object and open it
-            inbox.open(Folder.READ_ONLY);
-            // retrieve the messages from the folder in an array and print it
-            Message[] messages = inbox.search(newerThan);
-            for (int i = 0, n = messages.length; i < n; i++) {
-                try {
-                    Message message = messages[i];
-                    log.debug("---------------------------------");
-                    log.debug("Reading message  ---" + i);
-                    log.debug("Date: " + message.getReceivedDate());
-                    log.debug("Subject: " + message.getSubject());
-                    log.debug("From: " + message.getFrom()[0]);
-
-                    if (//message.getReceivedDate().getYear() > 2017 && 
-                            (message.getFrom()[0].toString().toLowerCase().contains("mail delivery") ||
-                                    message.getFrom()[0].toString().toLowerCase().contains("microsoft outlook") ||
-                                    message.getFrom()[0].toString().toLowerCase().contains("postmaster@"))) {
-                        if (message.getFrom()[0].toString().toLowerCase().contains("microsoft outlook")) {
-                            log.debug("Type of text: " + message.getContentType());
-                        }
-
-                        String content = this.getTextFromMessage(message);
-                        log.debug("Text: " + content);
-
-                        Matcher m = Pattern.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+").matcher(content);
-                        Set<String> emailList = new HashSet<>();
-                        while (m.find()) {
-                            emailList.add(m.group());
-                            log.debug("Email address extracted from text: " + m.group());
-                        }
-                        List<Email> sentEmailList = emailRepository.findByEmail(emailList);
-                        Set<String> resultEmailList = new HashSet<>();
-                        Set<String> articleIdList = new HashSet<>();
-                        for (Email email : sentEmailList) {
-                            articleIdList.add(email.getIdArticle().toString());
-                            resultEmailList.addAll(email.getTo());
-                        }
-                        if (resultEmailList.size() == 1) {
-                            Contact contact = contactRepository.update2Bounced((String) resultEmailList.toArray()[0]);
-                            for (String id : articleIdList) {
-                                // check if there is a new email for the bounced author
-                                String reconstructionsStatus = "Bounced";
-                                if (contact.existNotBounced()) {
-                                    reconstructionsStatus = "Not bounced";
-                                }
-                                articleCommunication.update2Status(id, reconstructionsStatus);
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-                    log.error("Error updating bounced for message: ", e);
-                }
-
-            }
-
-            //close the store and folder objects
-            inbox.close(false);
-            store.close();
-
-        } catch (Exception e) {
-            log.error("Error", e);
-        }
+//        try {
+//            Config config = configRepository.find();
+//
+//            //create properties field
+//            Properties props = new Properties();
+//            props.setProperty("mail.host", hostRead);
+//            props.setProperty("mail.port", portRead);
+//            props.setProperty("mail.transport.protocol", "imaps");
+//
+//            Session session = Session.getInstance(props,
+//                    new javax.mail.Authenticator() {
+//                        protected PasswordAuthentication getPasswordAuthentication() {
+//                            return new PasswordAuthentication(config.getUsername(), config.getPassword());
+//                        }
+//                    });
+//            Store store = session.getStore("imaps");
+//            store.connect();
+//            LocalDate date = LocalDate.of(2020, 1, 1);
+//
+//            SearchTerm newerThan = new ReceivedDateTerm(ComparisonTerm.GT,
+//                    Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+//            Folder inbox = store.getFolder(folder);
+//            //create the folder object and open it
+//            inbox.open(Folder.READ_ONLY);
+//            // retrieve the messages from the folder in an array and print it
+//            Message[] messages = inbox.search(newerThan);
+//            for (int i = 0, n = messages.length; i < n; i++) {
+//                try {
+//                    Message message = messages[i];
+//                    log.debug("---------------------------------");
+//                    log.debug("Reading message  ---" + i);
+//                    log.debug("Date: " + message.getReceivedDate());
+//                    log.debug("Subject: " + message.getSubject());
+//                    log.debug("From: " + message.getFrom()[0]);
+//
+//                    if (//message.getReceivedDate().getYear() > 2017 && 
+//                            (message.getFrom()[0].toString().toLowerCase().contains("mail delivery") ||
+//                                    message.getFrom()[0].toString().toLowerCase().contains("microsoft outlook") ||
+//                                    message.getFrom()[0].toString().toLowerCase().contains("postmaster@"))) {
+//                        if (message.getFrom()[0].toString().toLowerCase().contains("microsoft outlook")) {
+//                            log.debug("Type of text: " + message.getContentType());
+//                        }
+//
+//                        String content = this.getTextFromMessage(message);
+//                        log.debug("Text: " + content);
+//
+//                        Matcher m = Pattern.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+").matcher(content);
+//                        Set<String> emailList = new HashSet<>();
+//                        while (m.find()) {
+//                            emailList.add(m.group());
+//                            log.debug("Email address extracted from text: " + m.group());
+//                        }
+//                        List<Email> sentEmailList = emailRepository.findByEmail(emailList);
+//                        Set<String> resultEmailList = new HashSet<>();
+//                        Set<String> articleIdList = new HashSet<>();
+//                        for (Email email : sentEmailList) {
+//                            articleIdList.add(email.getIdArticle().toString());
+//                            resultEmailList.addAll(email.getTo());
+//                        }
+//                        if (resultEmailList.size() == 1) {
+//                            Contact contact = contactRepository.update2Bounced((String) resultEmailList.toArray()[0]);
+//                            for (String id : articleIdList) {
+//                                // check if there is a new email for the bounced author
+//                                String reconstructionsStatus = "Bounced";
+//                                if (contact.existNotBounced()) {
+//                                    reconstructionsStatus = "Not bounced";
+//                                }
+//                                articleCommunication.update2Status(id, reconstructionsStatus);
+//                            }
+//                        }
+//                    }
+//                } catch (Exception e) {
+//                    log.error("Error updating bounced for message: ", e);
+//                }
+//
+//            }
+//
+//            //close the store and folder objects
+//            inbox.close(false);
+//            store.close();
+//
+//        } catch (Exception e) {
+//            log.error("Error", e);
+//        }
     }
 
     private String getTextFromMessage(Message message) throws MessagingException, IOException {
@@ -339,7 +341,7 @@ public class EmailsService {
         return result;
     }
 
-    public void generateAndSendEmail(Article article, String emailType, String type) throws MessagingException {
+    public void generateAndSendEmail(Article article, String emailType, String type) throws Exception {
         Email email = this.generateEmail(article, emailType, type);
         this.sendEmail(email);
     }

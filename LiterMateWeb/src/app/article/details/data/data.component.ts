@@ -440,7 +440,7 @@ export class DataComponent implements OnInit, OnChanges {
         error => {
           const values = error.error.errorMessage.split(';');
           const id = values[1].split('id: ')[1];
-          const link = environment.apiUrl + `/article/${id}/details`;
+          const link = environment.apiWeb + `/article/${id}/details`;
           this.snackBar.open('Error saving new article - Duplicate resourced found in ' + error.error.errorMessage, 'View Article')
             .onAction()
             .subscribe(() =>

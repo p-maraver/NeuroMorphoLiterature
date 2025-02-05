@@ -70,24 +70,24 @@ public class ReconstructionsStatus implements Comparable<ReconstructionsStatus> 
             return this.details;
         }
 
-        public static String getGlobalStatus(List<SpecificDetails> statusList) {
-            if (statusList.contains(IN_PROCESSING_PIPELINE) 
-                    || statusList.contains(IN_RELEASE)
-                    || statusList.contains(ON_HOLD) 
-                    || statusList.contains(IN_REPOSITORY)) {
-                return "Available";
-            } if (statusList.contains(TO_BE_REQUESTED)
-                    || statusList.contains(POSITIVE_RESPONSE)
-                    || statusList.contains(INVITED)
-                    || statusList.contains(REMINDER)
-                    || statusList.contains(PESTERING)
-                    || statusList.contains(ULTIMATUM)) {
-                return "Determining availability";
-            } else {
-                return "Not available";
-            }
-
-        }
+//        public static String getGlobalStatus(List<SpecificDetails> statusList) {
+//            if (statusList.contains(IN_PROCESSING_PIPELINE) 
+//                    || statusList.contains(IN_RELEASE)
+//                    || statusList.contains(ON_HOLD) 
+//                    || statusList.contains(IN_REPOSITORY)) {
+//                return "Available";
+//            } if (statusList.contains(TO_BE_REQUESTED)
+//                    || statusList.contains(POSITIVE_RESPONSE)
+//                    || statusList.contains(INVITED)
+//                    || statusList.contains(REMINDER)
+//                    || statusList.contains(PESTERING)
+//                    || statusList.contains(ULTIMATUM)) {
+//                return "Determining availability";
+//            } else {
+//                return "Not available";
+//            }
+//
+//        }
 
         public String getStatus() {
             return this.status;

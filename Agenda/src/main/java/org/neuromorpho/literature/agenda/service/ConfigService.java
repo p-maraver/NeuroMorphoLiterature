@@ -29,14 +29,29 @@ import org.springframework.stereotype.Service;
 public class ConfigService {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
+    
     @Autowired
     private ConfigRepository repository;
+
+    @Autowired
+    private Azure azure;
     
     public void update(Config config) {
         repository.update(config);
     }
 
+    public void updateCode(String code) {
+        Config config = repository.find("on_behalf_of_provider");
+        config.setCode(code);
+        repository.update(config);
+        azure.setGraph();
+    }
+    
+    
     public Config find() {
         return repository.find();
     }
+//    public Config find() {
+//        return repository.find("on_behalf_of_provider");
+//    }
 }

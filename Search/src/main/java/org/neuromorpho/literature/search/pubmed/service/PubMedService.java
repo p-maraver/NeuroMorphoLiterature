@@ -77,6 +77,9 @@ public class PubMedService {
         }
         Map articleValues = (HashMap) result.get(uids.get(0));
         String title = (String) articleValues.get("title");
+        if (title == null) {
+            throw new PubMedException("Unknown pmid not found in " + db + " id: " + pmid);
+        }
         article.setTitle(this.getCorrectedName(title));
         Identifiers record = this.retrieveIdentifiers(pmid, db);
 

@@ -15,6 +15,229 @@
   ~
   -->
 
-<p>
-  release works!
-</p>
+<h2>Release Steps for Literature</h2>
+
+<form [formGroup]="versionForm" class="version-date-form">
+  <div>Update Version and Release Date, version is used to name the folder, avoid spaces</div>
+  <mat-form-field>
+    <input matInput type="text" placeholder="Version" formControlName="version_string">
+    <mat-error *ngIf="versionForm.get('version_string').invalid">{{ getVersionIdErrorMessage() }}</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [matDatepicker]="picker" placeholder="Version date" formControlName="version_date">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-hint align="end">The format date is MM/DD/YY</mat-hint>
+    <mat-error *ngIf="versionForm.get('version_date').invalid">Version date is required</mat-error>
+  </mat-form-field>
+</form>
+
+<hr>
+
+<div>
+  <button mat-raised-button color="primary" (click)="startReleaseReview()" [disabled]="executing_ReleaseInReview">Start Release in
+    Review
+  </button>
+</div>
+
+<ol>
+  <li>Update label version and date for release
+    <div *ngIf="tasksStatus_ReleaseInReview[0] as status">
+
+      <div *ngIf="status === TaskStatus.success" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: limegreen;">check</mat-icon>
+      </div>
+      <div *ngIf="status === TaskStatus.error" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: orangered;">cancel</mat-icon>
+      </div>
+      <div *ngIf="status === TaskStatus.processing" class="alert alert-success box-msg" role="alert">
+        <p>Processing ...</p>
+      </div>
+    </div>
+  </li>
+  <li>Export mongo DB nmotest into a folder in the server
+    <div *ngIf="tasksStatus_ReleaseInReview[1] as status">
+
+      <div *ngIf="status === TaskStatus.success" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: limegreen;">check</mat-icon>
+      </div>
+      <div *ngIf="status === TaskStatus.error" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: orangered;">cancel</mat-icon>
+      </div>
+      <div *ngIf="status === TaskStatus.processing" class="alert alert-success box-msg" role="alert">
+        <p>Processing ...</p>
+      </div>
+    </div>
+  </li>
+  <li>Copy the mongo DB files into the server <b>cng.gmu.edu</b>
+    <div *ngIf="tasksStatus_ReleaseInReview[2] as status">
+
+      <div *ngIf="status === TaskStatus.success" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: limegreen;">check</mat-icon>
+      </div>
+      <div *ngIf="status === TaskStatus.error" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: orangered;">cancel</mat-icon>
+      </div>
+      <div *ngIf="status === TaskStatus.processing" class="alert alert-success box-msg" role="alert">
+        <p>Processing ...</p>
+      </div>
+    </div>
+  </li>
+  <li>Import mongo DB into review DB <b>literature-review</b>
+    <div *ngIf="tasksStatus_ReleaseInReview[3] as status">
+
+      <div *ngIf="status === TaskStatus.success" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: limegreen;">check</mat-icon>
+      </div>
+      <div *ngIf="status === TaskStatus.error" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: orangered;">cancel</mat-icon>
+      </div>
+      <div *ngIf="status === TaskStatus.processing" class="alert alert-success box-msg" role="alert">
+        <p>Processing ...</p>
+      </div>
+    </div>
+  </li>
+</ol>
+
+
+<div>
+  <button mat-raised-button color="primary" (click)="startGenerateReports()" [disabled]="executing_GenerateReports">Generate Reports
+  </button>
+</div>
+
+<ol>
+  <li>Generate CompleteDetails
+    <div *ngIf="tasksStatus_GenerateReports[0] as status">
+
+      <div *ngIf="status === TaskStatus.success" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: limegreen;">check</mat-icon>
+      </div>
+      <div *ngIf="status === TaskStatus.error" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: orangered;">cancel</mat-icon>
+      </div>
+      <div *ngIf="status === TaskStatus.processing" class="alert alert-success box-msg" role="alert">
+        <p>Processing ...</p>
+      </div>
+    </div>
+  </li>
+  <li>Generate FrozenEvolution
+    <div *ngIf="tasksStatus_GenerateReports[1] as status">
+
+      <div *ngIf="status === TaskStatus.success" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: limegreen;">check</mat-icon>
+      </div>
+      <div *ngIf="status === TaskStatus.error" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: orangered;">cancel</mat-icon>
+      </div>
+      <div *ngIf="status === TaskStatus.processing" class="alert alert-success box-msg" role="alert">
+        <p>Processing ...</p>
+      </div>
+    </div>
+  </li>
+  <li>Copy FrozenEvolution to the local server
+    <div *ngIf="tasksStatus_GenerateReports[2] as status">
+
+      <div *ngIf="status === TaskStatus.success" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: limegreen;">check</mat-icon>
+      </div>
+      <div *ngIf="status === TaskStatus.error" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: orangered;">cancel</mat-icon>
+      </div>
+      <div *ngIf="status === TaskStatus.processing" class="alert alert-success box-msg" role="alert">
+        <p>Processing ...</p>
+      </div>
+    </div>
+  </li>
+  <li>Download FrozenEvolution
+    <a mat-icon-button [appDisableLink]="!successfully_GenerateReports" href="/downloads/FrozenEvolution.xlsx"
+       download="FrozenEvolution.xlsx">
+      <mat-icon>download</mat-icon>
+    </a>
+  </li>
+
+</ol>
+
+<div>
+  <button mat-raised-button color="primary" (click)="startReleaseMain()" [disabled]="executing_ReleaseInMain">Start Release in
+    Main
+  </button>
+</div>
+<ol>
+  <li>Copy CompleteDetails in main & Import mongoDB into main DB <b>literature-main</b>
+    <div *ngIf="tasksStatus_ReleaseInMain[0] as status">
+
+      <div *ngIf="status === TaskStatus.success" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: limegreen;">check</mat-icon>
+      </div>
+      <div *ngIf="status === TaskStatus.error" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: orangered;">cancel</mat-icon>
+      </div>
+      <div *ngIf="status === TaskStatus.processing" class="alert alert-success box-msg" role="alert">
+        <p>Processing ...</p>
+      </div>
+    </div>
+  </li>
+</ol>
+
+<div>
+  <button mat-raised-button color="primary" (click)="webHook()" [disabled]="executing_LaunchBibliometric">Launch Bibliometric
+  </button>
+</div>
+<ol>
+  <li>NMO Bibliometric alert updates
+    <div *ngIf="tasksStatus_LaunchBibliometric[0] as status">
+
+      <div *ngIf="status === TaskStatus.success" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: limegreen;">check</mat-icon>
+      </div>
+      <div *ngIf="status === TaskStatus.error" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: orangered;">cancel</mat-icon>
+      </div>
+      <div *ngIf="status === TaskStatus.processing" class="alert alert-success box-msg" role="alert">
+        <p>Processing ...</p>
+      </div>
+    </div>
+  </li>
+</ol>
+
+<div>
+  <hr>
+  <h3>Something went wrong? Don&#39;t worry</h3>
+  <div>Perform RollBack in cng.gmu.edu review for version:</div>
+  <form [formGroup]="rollbackForm" (ngSubmit)="onRollbackSubmit()" class="rollback-form">
+    <mat-form-field appearance="fill">
+      <mat-label>Old version</mat-label>
+      <mat-select formControlName="selectedOption">
+        <mat-option *ngIf="isLoading_RollbackVersion" disabled>Loading...</mat-option>
+        <mat-option *ngFor="let option of optionsRollbackVersion" [value]="option">
+          {{ option.viewValue }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="optionsErrorMessage">{{ optionsErrorMessage }}</mat-error>
+      <mat-error
+        *ngIf="rollbackForm.get('selectedOption')?.hasError('required') && rollbackForm.get('selectedOption')?.touched">
+        A selection is mandatory
+      </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Start Rollback</button>
+  </form>
+
+  <ol>
+    <li>Import mongoDB rollback version in review DB <b>literature-review</b>
+      <div *ngIf="tasksStatus_Rollback[0] as status">
+
+        <div *ngIf="status === TaskStatus.success" class="alert alert-success box-msg" role="alert">
+          <mat-icon style="color: limegreen;">check</mat-icon>
+        </div>
+        <div *ngIf="status === TaskStatus.error" class="alert alert-success box-msg" role="alert">
+          <mat-icon style="color: orangered;">cancel</mat-icon>
+        </div>
+        <div *ngIf="status === TaskStatus.processing" class="alert alert-success box-msg" role="alert">
+          <p>Processing ...</p>
+        </div>
+      </div>
+    </li>
+  </ol>
+
+
+</div>

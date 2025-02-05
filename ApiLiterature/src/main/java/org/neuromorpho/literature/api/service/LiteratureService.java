@@ -21,7 +21,7 @@
 package org.neuromorpho.literature.api.service;
 
 import org.neuromorpho.literature.api.model.Article;
-import org.neuromorpho.literature.api.repository.LiteratureRepository;
+import org.neuromorpho.literature.api.repository.LiteratureRepositorfy;
 import org.neuromorpho.literature.api.service.dto.ArticleDtoAssembler;
 import org.neuromorpho.literature.api.model.ReconstructionsStatus;
 import org.neuromorpho.literature.api.service.dto.ArticleDto;
@@ -94,7 +94,6 @@ public class LiteratureService {
 	public Page<ArticleDto> findPublicationsByQuery(Integer page, HashMap<String, String> query){
         log.debug("Returning articles for query: " + query + " and page: " + page);
         Page<Article> articlePage = repository.findPublicationsByQuery(page, query);
-        log.debug("Found #articles : " + articlePage.getTotalElements());
        
         List<ArticleDto> articleDtoList = new ArrayList<>();
         for (Article article: articlePage.getContent()){

@@ -41,11 +41,17 @@ public class ConfigController {
      * @apiGroup  Agenda - Config
      *
      */
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(value= "/config", method = RequestMethod.PUT)
     public void update(
             @RequestBody Config config) {
         configService.update(config);
     }
+
+    
+//    @RequestMapping(value= "/config", method = RequestMethod.PUT)
+//    public void updateCode(@RequestParam String code) {
+//        configService.updateCode(code);
+//    }
 
     /**
      * @apiVersion 1.0.0

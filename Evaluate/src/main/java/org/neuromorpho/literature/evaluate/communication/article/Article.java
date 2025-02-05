@@ -161,5 +161,12 @@ public class Article {
         
         return this.data.hasCompleteData();
     }
-    
-}
+
+    @BsonIgnore
+    @JsonIgnore
+    protected Boolean isRxivJournal() {
+        return this.data.isRxivJournal();
+    }
+
+
+    }

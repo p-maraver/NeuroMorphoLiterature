@@ -18,13 +18,21 @@
 package org.neuromorpho.literature.agenda.controller;
 
 import org.neuromorpho.literature.agenda.communication.Article;
+import org.neuromorpho.literature.agenda.exceptions.AuthenticationException;
+import org.neuromorpho.literature.agenda.exceptions.ConflictException;
 import org.neuromorpho.literature.agenda.model.Email;
 import org.neuromorpho.literature.agenda.service.EmailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class EmailsController {
@@ -75,8 +83,8 @@ public class EmailsController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public Email generateEmail(
-            @RequestParam(required = true) String statusDetails,
-            @RequestParam(required = true) String type,
+            @RequestParam String statusDetails,
+            @RequestParam String type,
             @RequestBody Article article) {
         return emailsService.generateEmail(article, fieldsAssembler.getFieldType(statusDetails), type);
     }
@@ -135,7 +143,7 @@ public class EmailsController {
      */
     @RequestMapping(path = "/send", method = RequestMethod.POST)
     public void sendEmail(
-            @RequestBody Email email) throws MessagingException {
+            @RequestBody Email email) throws Exception {
          emailsService.sendEmail(email);
     }
 
@@ -176,10 +184,23 @@ public class EmailsController {
      */
     @RequestMapping(path = "/generateandsend", method = RequestMethod.POST)
     public void generateAndSendEmail(
-            @RequestParam(required = true) String statusDetails,
-            @RequestParam(required = true) String type,
-            @RequestBody Article article) throws MessagingException {
+            @RequestParam String statusDetails,
+            @RequestParam String type,
+            @RequestBody Article article) throws Exception {
         emailsService.generateAndSendEmail(article, fieldsAssembler.getFieldType(statusDetails), type);
     }
+
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public @ResponseBody
+    Map<String, Object> handleException(AuthenticationException e,
+                                        HttpServletRequest request,
+                                        HttpServletResponse resp) {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("errorMessage", e.getMessage());
+        return result;
+    }
+
 
 }

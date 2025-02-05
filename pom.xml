@@ -26,7 +26,7 @@
     <packaging>pom</packaging>
     <version>1.0</version>
     <modules>
-        <module>ApiLiterature</module>
+<!--        <module>ApiLiterature</module>-->
         <module>Agenda</module>
         <module>ReconstructionsExpiration</module>
         <module>Release</module>
@@ -67,10 +67,5 @@
             <version>3.8.2</version>
         </dependency>
     </dependencies>
-    
-    <properties>
-        <maven.compiler.source>10</maven.compiler.source>
-        <maven.compiler.target>10</maven.compiler.target>
-    </properties>
 
 </project>

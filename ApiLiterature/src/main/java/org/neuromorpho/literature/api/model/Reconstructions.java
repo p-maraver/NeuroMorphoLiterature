@@ -17,6 +17,8 @@
 
 package org.neuromorpho.literature.api.model;
 
+import org.bson.codecs.pojo.annotations.BsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,6 @@ public class Reconstructions {
 
     private List<ReconstructionsStatus> currentStatusList;
     private List<ReconstructionsStatus> pastStatusList;
-    private String globalStatus;
 
     public Reconstructions() {
     }
@@ -70,15 +71,8 @@ public class Reconstructions {
         }
         this.currentStatusList = currentStatusList;
     }
-
-    public void setGlobalStatus(String globalStatus) {
-        this.globalStatus = globalStatus;
-    }
-
-    public String getGlobalStatus() {
-        return globalStatus;
-    }
-/* @BsonIgnore
+    
+    @BsonIgnore
     public String getGlobalStatus(){
         String globalStatus = "Not available";
         for (ReconstructionsStatus status: this.getCurrentStatusList()){
@@ -90,7 +84,7 @@ public class Reconstructions {
         }
         return globalStatus;
         
-    }*/
+    }
 
     @Override
     public String toString() {

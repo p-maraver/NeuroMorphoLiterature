@@ -39,6 +39,7 @@ import {ClassifierComponent} from './classifier/classifier.component';
 import {TrainComponent} from './classifier/train/train.component';
 import {KeywordsComponent} from './classifier/keywords/keywords.component';
 import {Dashboard2Component} from './dashboard2/dashboard2.component';
+import {ReleaseComponent} from './release/release.component';
 
 
 const routes: Routes = [
@@ -96,7 +97,8 @@ const routes: Routes = [
       {path: 'portals', component: PortalSearchComponent},
       {path: 'keywords', component: KeywordsSearchComponent}
     ]
-  }
+  },
+  {path: 'release', component: ReleaseComponent},
 ];
 
 

@@ -18,7 +18,7 @@
 #mongoexport -d emails -c contact --type=csv --query '{"unsubscribed":false,"emailList.bounced":false}' --out /var/www/litermate/assets/contacts.csv --fields firstName,lastName,emailList.email
 mongo emails --eval 'db.contact.aggregate( [
    {$unwind: "$emailList"},
-   {$match: {"unsubscribed":false, "emailList.bounced":false}},
+   {$match: {"unsubscribed": {$ne: true}, "emailList.bounced":{$ne: true}}},
    {$project: { _id:0,firstName:"$firstName",lastName:"$lastName", "email": "$emailList.email"}},
    {$out: "contact_csv"}
 ]);'

@@ -35,9 +35,9 @@ public class FullTextCommunication {
 
     public ArticleContent getFullText(Article article) {
         RestTemplate restTemplate = new RestTemplate();
-        String url = uri + "?images=false";
+        String url = uri + "/" + article.getId() + "?images=false";
         log.debug("Creating rest connection for URI: " + url);
-        ArticleContent articleContent = restTemplate.postForObject(url, article, ArticleContent.class);
+        ArticleContent articleContent = restTemplate.getForObject(url, ArticleContent.class);
         return articleContent;
     }
 

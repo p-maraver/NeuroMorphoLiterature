@@ -15,4 +15,4 @@
 #  
 #
 
-ssh cng.gmu.edu "mongorestore --drop --db literature-main ./literature/dumps/\"$1\"/nmotest;./literature/exportMain.sh;cp /usr/share/tomcat/apache-tomcat-7.0.54/webapps/neuroMorphoReview/CompleteDetails.xlsx /usr/share/tomcat/apache-tomcat-7.0.54/webapps/neuroMorpho/CompleteDetails.xlsx"
+ssh cng.gmu.edu "mongorestore --drop --db literature-main --noIndexRestore ./literature/dumps/\"$1\"/nmotest;./literature/exportMain.sh;cp /usr/share/tomcat/apache-tomcat-7.0.54/webapps/neuroMorphoReview/CompleteDetails.xlsx /usr/share/tomcat/apache-tomcat-7.0.54/webapps/neuroMorpho/CompleteDetails.xlsx"

@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *  
+ *
  */
 
 package org.neuromorpho.literature.article.repository;
@@ -397,7 +397,6 @@ public class ArticleRepository {
                     }
                     List<Pattern> valueListCaseInsensitive = valueList.stream().map(s -> Pattern.compile(s, Pattern.CASE_INSENSITIVE)).collect(Collectors.toList());
                     List<Pattern> valueListStartEndCaseInsensitive = valueList.stream().map(s -> Pattern.compile("^" + s + "$", Pattern.CASE_INSENSITIVE)).collect(Collectors.toList());
-
                     match = Filters.or(
                             Filters.in("data.pmid", valueList),
                             Filters.in("data.pmcid", valueList),
@@ -405,6 +404,7 @@ public class ArticleRepository {
 //                            Filters.in("data.authorList.emailList", valueListStartEndCaseInsensitive),
                             Filters.in("data.title", valueListCaseInsensitive),
                             Filters.in("data.authorList.name", valueListCaseInsensitive));
+                    
                     aggregatesList.add(Aggregates.match(match));
                 }
             } else if (entry.getKey().toLowerCase().contains("date")) {

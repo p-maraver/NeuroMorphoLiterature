@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # Copyright (c) 2015-2022, Patricia Maraver
 #
@@ -15,4 +16,9 @@
 #  
 #
 
-ssh cng.gmu.edu "mongorestore --drop --db literature-review ./literature/dumps/\"$1\"/nmotest;./literature/exportReview.sh"
+for file in ./dumps/nmotest/$1/*.json; do
+  collection_name=$(basename "$file" .json)
+  ssh cng.gmu.edu "mongoimport --db nmotest --collection $collection_name --drop --file ./literature/dumps/\"$1\"/$collection_name.json"
+done
+
+

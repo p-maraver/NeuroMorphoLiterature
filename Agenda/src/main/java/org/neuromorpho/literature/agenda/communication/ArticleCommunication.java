@@ -23,8 +23,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-
 @Component
 public class ArticleCommunication {
 
@@ -32,22 +30,6 @@ public class ArticleCommunication {
     private String uriArticles;
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-
-    public ArticlePage getArticles(Integer page, String status) {
-        String url = uriArticles + "/status/" + status + "?page=" + page;
-        log.debug("Creating rest connection for URI: " + url);
-        RestTemplate restTemplate = new RestTemplate();
-        ArticlePage reconstructionsPage = restTemplate.getForObject(url, ArticlePage.class);
-        return reconstructionsPage;
-    }
-
-    public List<String> getStatus() {
-        String url = uriArticles + "/status";
-        log.debug("Creating rest connection for URI: " + url);
-        RestTemplate restTemplate = new RestTemplate();
-        List statusList = restTemplate.getForObject(url, List.class);
-        return statusList;
-    }
 
     public void update2Status(String articleId, String reconstructionsStatus) {
         String url = uriArticles + "/reconstructions/" + articleId + "/" + reconstructionsStatus;

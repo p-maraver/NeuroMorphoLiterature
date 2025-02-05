@@ -111,7 +111,7 @@ public class ArticleDtoAssembler {
                 }
             }
         } catch (Exception e) {
-            log.error("Exception for article id: ", e);
+            log.error("Exception for article id: " + article.getId(), e);
         }
 
 

@@ -17,6 +17,8 @@
 
 package org.neuromorpho.literature.agenda.repository;
 
+import com.mongodb.client.model.Updates;
+import org.bson.types.ObjectId;
 import org.neuromorpho.literature.agenda.model.Config;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
@@ -59,6 +61,12 @@ public class ConfigRepository {
         Bson match = Filters.eq("_id", config.getId());
         collection.replaceOne(match, config);
     }
+
+    public Config find(String type) {
+        FindIterable<Config> resultList = collection.find(Filters.eq("type", type));
+        return resultList.first();
+    }
+
 
     public Config find() {
         FindIterable<Config> resultList = collection.find();

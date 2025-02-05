@@ -17,34 +17,35 @@
 
 package org.neuromorpho.literature.search.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 public class Log {
     
-    private LocalDate start;
-    private LocalDate stop;
+    private LocalDateTime start;
+    private LocalDateTime stop;
     private Long threadId;
     private String cause;
 
     public Log() {
-        this.start = LocalDate.now();
+        this.start = LocalDateTime.now();
         this.cause = "Executing ...";
+        this.stop = null;
     }
-    
-    public LocalDate getStart() {
+
+    public LocalDateTime getStart() {
         return start;
     }
 
-    public void setStart(LocalDate start) {
+    public void setStart(LocalDateTime start) {
         this.start = start;
     }
 
-    public LocalDate getStop() {
+    public LocalDateTime getStop() {
         return stop;
     }
 
-    public void setStop(LocalDate stop) {
+    public void setStop(LocalDateTime stop) {
         this.stop = stop;
     }
 
@@ -60,9 +61,10 @@ public class Log {
     public String getCause() {
         return cause;
     }
+    
     public void setCause(String cause) {
         this.cause = cause;
-        this.stop = LocalDate.now();
+        this.stop = LocalDateTime.now();
 
     }
 

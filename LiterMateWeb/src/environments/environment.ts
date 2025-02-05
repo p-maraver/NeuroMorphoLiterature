@@ -21,8 +21,12 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://3.210.2.30:8189',
+  apiUrl: 'https://nmo-meta.cec.gmu.edu/litermate/api',
+  apiWeb: 'https://nmo-meta.cec.gmu.edu/litermate',
+  apiNeuromorpho: 'https://nmo-meta.cec.gmu.edu',
+
 };
+
 
 /*
  * For easier debugging in development mode, you can import the following file

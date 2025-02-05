@@ -34,6 +34,7 @@ public class ArticleData {
     private String pmcid;
     private LocalDate publishedDate;
     private String pdfLink;
+    private String journal;
     private List<Author> authorList;
 
     public ArticleData() {
@@ -120,4 +121,12 @@ public class ArticleData {
 
     }
 
+    @BsonIgnore
+    @JsonIgnore
+    protected Boolean isRxivJournal() {
+        return journal != null &&
+                (journal.toLowerCase().equals("biorxiv") ||
+                        journal.toLowerCase().equals("arxiv") ||
+                        journal.toLowerCase().equals("research square"));
+    }
 }
