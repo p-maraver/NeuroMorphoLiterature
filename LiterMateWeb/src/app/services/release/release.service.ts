@@ -41,7 +41,7 @@ export class ReleaseService {
   // private url_release = 'http://129.174.10.65:8192';
   private url_release = environment.apiUrl + '/release';
   private url_api = environment.apiNeuromorpho + '/apiLiteratureReview/literature/reports?';
-
+  private url_bibliometrics = environment.apiBibliometrics;
   constructor(private http: HttpClient) {
   }
 
@@ -173,7 +173,7 @@ export class ReleaseService {
 
   startWebHook(): Observable<TaskProperties> {
 
-    return this.http.get('http://ec2-100-28-253-215.compute-1.amazonaws.com:5050/users/webhook', {observe: 'response'}).pipe(
+    return this.http.get(`${this.url_bibliometrics}/users/webhook`, {observe: 'response'}).pipe(
       map(_res => {
         return {
           status: TaskStatus.success,

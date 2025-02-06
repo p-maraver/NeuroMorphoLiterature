@@ -20,4 +20,5 @@ export const environment = {
   apiUrl: 'https://nmo-meta.cec.gmu.edu/litermate/api',
   apiWeb: 'https://nmo-meta.cec.gmu.edu/litermate',
   apiNeuromorpho: 'https://nmo-meta.cec.gmu.edu',
+  apiBibliometrics: 'https://nmo-meta.cec.gmu.edu'
 };
