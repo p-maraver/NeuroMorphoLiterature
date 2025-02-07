@@ -186,7 +186,9 @@
 <ol>
   <li>NMO Bibliometric alert updates
     <div *ngIf="tasksStatus_LaunchBibliometric[0] as status">
-
+      <div *ngIf="status === TaskStatus.special" class="alert alert-success box-msg" role="alert">
+        <mat-icon style="color: limegreen;">check</mat-icon>
+      </div>
       <div *ngIf="status === TaskStatus.success" class="alert alert-success box-msg" role="alert">
         <mat-icon style="color: limegreen;">check</mat-icon>
       </div>

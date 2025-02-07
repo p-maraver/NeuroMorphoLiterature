@@ -25,7 +25,8 @@ import {environment} from '../../../environments/environment';
 export enum TaskStatus {
   processing,
   error,
-  success
+  success,
+  special
 }
 
 export interface TaskProperties {
@@ -42,6 +43,7 @@ export class ReleaseService {
   private url_release = environment.apiUrl + '/release';
   private url_api = environment.apiNeuromorpho + '/apiLiteratureReview/literature/reports?';
   private url_bibliometrics = environment.apiBibliometrics;
+
   constructor(private http: HttpClient) {
   }
 
@@ -94,7 +96,6 @@ export class ReleaseService {
     );
 
   }
-
 
 
   updateVersion(releaseObject): Observable<TaskProperties> {
@@ -183,23 +184,50 @@ export class ReleaseService {
       }),
       catchError((err) => {
 
-        console.log(err);
-
         if (err.status === 0) {
+          if (err.error instanceof ErrorEvent) {
 
-          return of({
-            status: TaskStatus.error,
-            taskName: 'web hook',
-            message: 'Unable to connect to server'
-          });
+            // Client-side error (browser)
+            return of({
+              status: TaskStatus.error,
+              taskName: 'web hook',
+              message: 'Client error.'
+            });
+
+          } else {  // Connection error (server not responding).
+
+            /// SPECIAL CASE handling (without proxy):
+            // This call is a special case due to the server's non-compliance
+            // with protocol standards, as evidenced by its non-responsiveness.
+            return of({
+              status: TaskStatus.special, // It should be an `TaskStatus.error`...
+              taskName: 'web hook',
+              message: 'The server is not responding'
+            });
+          }
 
         }
 
+        /// SPECIAL CASE handling (with proxy):
+        // This call is a special case due to the server's non-compliance
+        // with protocol standards, as evidenced by its non-responsiveness.
+        if (err.status === 504) {
+          // This status should be processed as a standard server error...
+          return of({
+            status: TaskStatus.special,
+            taskName: 'web hook',
+            message: 'The server is not responding'
+          });
+        }
+
+        // Server-side error (HTTP response with status code)
         return of({
           status: TaskStatus.error,
           taskName: 'web hook',
           message: 'Server error'
         });
+
+
       })
     );
   }

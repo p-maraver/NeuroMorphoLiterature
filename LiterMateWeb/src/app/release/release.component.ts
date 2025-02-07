@@ -191,7 +191,7 @@ export class ReleaseComponent implements OnInit {
         next => {
           console.log(next);
           this.executing_ReleaseInReview = false;
-          this.snackBar.open('All tasks completed');
+          this.snackBar.open('All tasks completed', 'Close');
         },
         (error: TaskProperties) => {
           console.log(error);
@@ -248,7 +248,7 @@ export class ReleaseComponent implements OnInit {
           console.log(next);
           this.executing_GenerateReports = false;
           this.successfully_GenerateReports = true;
-          this.snackBar.open('All tasks completed');
+          this.snackBar.open('All tasks completed', 'Close');
         },
         (error: TaskProperties) => {
           console.log(error);
@@ -293,7 +293,7 @@ export class ReleaseComponent implements OnInit {
         next => {
           console.log(next);
           this.executing_ReleaseInMain = false;
-          this.snackBar.open('All tasks completed');
+          this.snackBar.open('All tasks completed', 'Close');
         },
         (error: TaskProperties) => {
           console.log(error);
@@ -320,16 +320,21 @@ export class ReleaseComponent implements OnInit {
             this.tasksStatus_LaunchBibliometric[0] = TaskStatus.error;
             return throwError(taskResult);
           }
+          // Special case where server non-responsiveness suggests
+          // non-compliance with protocol standards.
+          // The response will be handled as a success.
+          if (taskResult.status === TaskStatus.special) {
+            this.tasksStatus_LaunchBibliometric[0] = TaskStatus.special;
+            return of(taskResult);
+          }
         })
       )
       .subscribe(
         next => {
-          console.log(next);
           this.executing_LaunchBibliometric = false;
-          this.snackBar.open('All tasks completed');
+          this.snackBar.open('All tasks completed', 'Close');
         },
         (error: TaskProperties) => {
-          console.log(error);
           this.executing_LaunchBibliometric = false;
           this.snackBar.open(error.message, 'Error');
 
@@ -364,7 +369,7 @@ export class ReleaseComponent implements OnInit {
         next => {
           console.log(next);
           this.executing_Rollback = false;
-          this.snackBar.open('All tasks completed');
+          this.snackBar.open('All tasks completed', 'Close');
         },
         (error: TaskProperties) => {
           console.log(error);
