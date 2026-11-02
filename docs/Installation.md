@@ -6,7 +6,7 @@
 
 ## Compile and build the code
 
-1.  Download the code from [GitHub](https://github.com/Joindbre?tab=repositories)
+1.  Download the code from [GitHub](https://github.com/p-maraver/NeuroMorphoLiterature)
 2.  Use [MVN](https://maven.apache.org/download.cgi) to compile and build the code as a standalone jar
 
 ## Install and Launch the Plugin
